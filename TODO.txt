@@ -1,0 +1,21 @@
+JOTARO : {
+	set attack damages.
+	make za wardo move with W KEY
+	make charge function
+	add effects
+}
+
+MENU : {
+	add intro
+	add player select menu
+}
+
+MISC : {
+	add common effects
+	add common sounds
+}
+
+
+"also have to optimise the game"
+
+"have to do many things but i dont remeber LOL"
