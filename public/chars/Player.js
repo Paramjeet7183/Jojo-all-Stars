@@ -3,12 +3,10 @@ class Player{
         this.playerObj = add([
             sprite(charObj.name,{anim:"idle"}),
             area({
-                width:20,
-                height:20
+                width:0,
+                height:0
             }),
-            body({
-                jumpForce:height()*0.5,
-            }),
+            body(),
             pos(x,y),
             origin(vec2(0,1)),
             scale(3),

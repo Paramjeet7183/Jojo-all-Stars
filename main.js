@@ -6,3 +6,5 @@ menu.loadAsset();
 menu.introScene();
 menu.menuScene();
 menu.playerSelectMenu();
+Game();
+go("playerOneSelect");

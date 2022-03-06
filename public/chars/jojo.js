@@ -213,7 +213,7 @@ const jojo = {
         },
         //------------------------------------------------------------
         // attack_A means a attack which will be assigned to key "A"
-        attack_A:function(player){
+        attack_A:function(player,isFlip){
             if(this.canAttack){
             player.play("punch4")
             play("attack6")
@@ -225,7 +225,7 @@ const jojo = {
         },
         
         //------------------------------------------------------------
-        attack_S:function(player,enemyPos,faceDir){
+        attack_S:function(player,enemyPos,isFlip){
             //only run this if player canAttack == true
             if(this.canAttack){
                 //playing single punch animation
@@ -271,7 +271,7 @@ const jojo = {
 
         //------------------------------------------------------------
 
-        attack_D:function(player,isFlip){
+        attack_D:function(player,enemyPos,isFlip){
             let faceDir;
             if(isFlip){faceDir = LEFT}else{
                 if(!isFlip){faceDir = RIGHT}
@@ -344,7 +344,7 @@ const jojo = {
 
         //------------------------------------------------------------
 
-        attack_W:function(player,enemyPos,faceDir){
+        attack_W:function(player,enemyPos,isFlip){
             if(this.canAttack){
                 this.canAttack = false;
                 //play shooting himself animation

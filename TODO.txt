@@ -6,8 +6,8 @@ JOTARO : {
 }
 
 MENU : {
-	add intro
-	add player select menu
+	add intro -- done -- bave to add msuic
+	add player select menu -- done -- have to add music
 }
 
 MISC : {
