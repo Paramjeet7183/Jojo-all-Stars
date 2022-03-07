@@ -1,75 +1,53 @@
-loadSprite("bg","../assets/sbr/bg.png")
-loadSprite("bg1","../assets/sbr/bg1.png")
-loadSprite("bg2","../assets/sbr/bg2.png")
-loadSprite("bg3","../assets/sbr/bg3.png")
-export default function stage() {
-    const b = add([
-        sprite("bg"),
-        area(),
-        pos(center()),
-        origin("center"),
-        layer("bg"),
-        scale(Math.max(
-            width()/2000,
-            height()/375
-        )),
-    ])
-    const b1 = add([
-        sprite("bg1"),
-        area(),
-        pos(center()),
-        origin("center"),
-        layer("bg"),
-        scale(Math.min(
-            width()/955,
-            height()/88
-        )),
-    ])
-    const b3 = add([
-        sprite("bg3"),
-        area(),
-        pos(center()),
-        origin("center"),
-        layer("bg"),
-        scale(Math.min(
-            width()/1389,
-            height()/122
-        )),
-    ])
-    
-    const b2 = add([
-        sprite("bg2"),
-        area(),
-        pos(center()),
-        origin("center"),
-        layer("bg"),
-        scale(Math.max(
-            width()/1475,
-            height()/422
-        )),
-    ])
-    const p = add([
-        rect(width(),height()/10),
-        area(),
-        solid(),
-        pos(0,height()-height()/10),
-        color(RED)
-    ])
-    const l = add([
-        rect(20,1024),
-        area(),
-        solid(),
-        pos(0,height()),
-        origin("bot"),
-        color(RED),
-    ])
-    const r = add([
-        rect(20,1024),
-        area(),
-        solid(),
-        pos(width(),height()),
-        origin("bot"),
-        color(RED),
-    ])
-    console.log("hello")
+import allStage from "./allStage.js";
+loadSprite("stageOneBg1", "../assets/stage 01/1.png");
+loadSprite("stageOneBg2", "../assets/stage 01/2.png");
+
+loadSprite("stageTwoBg1", "../assets/stage 02/1.png");
+loadSprite("stageTwoBg2", "../assets/stage 02/2.png");
+loadSprite("stageTwoBg3", "../assets/stage 02/3.png");
+loadSprite("stageTwoBg4", "../assets/stage 02/4.png");
+
+loadSprite("stageThreeBg1", "../assets/stage 03/1.png");
+loadSprite("stageThreeBg2", "../assets/stage 03/2.png");
+
+async function stage(stageNum) {
+  const stageArray = [
+    allStage.stageOne,
+    allStage.stageTwo,
+    allStage.stageThree,
+  ];
+  let vw = 0.01 * width();
+  let vh = 0.01 * height();
+
+  const left = add([
+    rect(2, 100 * vh),
+    area(),
+    solid(),
+    pos(0, height()),
+    origin("botleft"),
+    color(RED),
+    layer("effect"),
+  ]);
+  const right = add([
+    rect(2, 100 * vh),
+    area(),
+    solid(),
+    pos(width(), height()),
+    origin("botright"),
+    color(RED),
+    layer("effect"),
+  ]);
+
+  const platform = add([
+    rect(100 * width(), 10 * vh),
+    area(),
+    solid(),
+    pos(0, height()),
+    color(RED),
+    origin("botleft"),
+    opacity(0.5),
+    layer("effect"),
+  ]);
+  stageArray[stageNum]();
 }
+export default stage;
