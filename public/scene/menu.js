@@ -18,12 +18,24 @@ const menu = {
     loadSprite("p1s", "../assets/menu/p1s.png");
     loadSprite("p2", "../assets/menu/p2.png");
     loadSprite("p2s", "../assets/menu/p2s.png");
+
+    loadSound("intro", "../assets/sound/intro.wav");
+    loadSound("jotaro", "../assets/sound/jotaroIntro.wav");
+    loadSound("menu", "../assets/sound/menu.wav");
+    loadSound("playerMenu", "../assets/sound/player.wav");
+    loadSound("menuNav", "../assets/sound/menuNav.wav");
+    loadSound("select", "../assets/sound/select.wav");
   },
 
   introScene: async function () {
     scene("intro", () => {
+      const jotaroSound = play("jotaro");
+      const introSound = play("intro", {
+        loop: true,
+      });
+      jotaroSound.play();
+      introSound.play();
       console.log("intro scene is running");
-
       //intro cover with game title
       const cover = add([
         sprite("cover"),
@@ -55,18 +67,23 @@ const menu = {
         txt.destroy();
         cover.destroy();
         go("menu");
+        introSound.stop();
       });
 
       onClick("coverObj", () => {
         txt.destroy();
         cover.destroy();
         go("menu");
+        introSound.stop();
       });
     });
   }, //introScene function ends here
 
   menuScene: async function () {
     scene("menu", () => {
+      const menuSound = play("menu", {
+        loop: true,
+      });
       console.log("menu scene is running");
       //moving green background
       const greenBg = add([
@@ -130,6 +147,7 @@ const menu = {
         greenBg.destroy();
         jotaroBg.destroy();
         arrow.destroy();
+        menuSound.stop();
         go("playerOneSelectMenu");
       });
     });

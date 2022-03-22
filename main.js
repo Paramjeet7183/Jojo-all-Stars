@@ -8,4 +8,8 @@ menu.introScene();
 menu.menuScene();
 playerSelectMenu();
 Game();
-go("intro");
+go("game");
+
+onKeyPress("v", () => {
+  play("tusk");
+});

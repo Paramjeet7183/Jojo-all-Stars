@@ -1,6 +1,9 @@
 import Game from "./game.js";
 async function playerSelectMenu() {
   scene("playerOneSelectMenu", () => {
+    const playerMenuSound = play("playerMenu", {
+      loop: true,
+    });
     const allPlayers = [
       "johnny",
       "jotaro",
@@ -38,11 +41,6 @@ async function playerSelectMenu() {
     loop(20, () => {
       a = inv(a);
     });
-
-    //view port
-    let vw = 0.01 * width();
-    let vh = 0.01 * height();
-
     const cellContainer = add([
       rect(50 * vw, 50 * vh),
       area(),
@@ -141,6 +139,7 @@ async function playerSelectMenu() {
         opacity(0.5),
         stay(),
         `cell${i}`,
+        "allGreenCell",
       ]);
     }
     //created an empty array to store position of each cell;
@@ -225,6 +224,7 @@ async function playerSelectMenu() {
         origin("center"),
         z(2),
         `${allPlayers[i]}Cell`,
+        "allPlayerCell",
       ]);
     }
     let j = 0;
@@ -274,31 +274,40 @@ async function playerSelectMenu() {
     onKeyPress("right", () => {
       if (j < 8) {
         ++j;
-        p1.moveTo(allCellCenter[j]),
-          every("pOneBig", (e) => {
-            e.destroy();
-            playerOneBigFace(j);
-          });
+        p1.moveTo(allCellCenter[j]), play("menuNav");
+        destroyAll("pOneBig");
+        playerOneBigFace(j);
       }
     });
 
     onKeyPress("left", () => {
       if (j > 0) {
         --j;
-        p1.moveTo(allCellCenter[j]),
-          every("pOneBig", (e) => {
-            e.destroy();
-            playerOneBigFace(j);
-          });
+        p1.moveTo(allCellCenter[j]), play("menuNav");
+        destroyAll("pOneBig");
+        playerOneBigFace(j);
       }
     });
     onKeyPress("enter", () => {
-      p1.destroy();
+      playerMenuSound.stop();
+      play("select");
       addSel(j);
+      p1.destroy();
       go("playerTwoSelectMenu", j);
+    });
+    onKeyPress("d", () => {
+      playerMenuSound.stop();
+      destroyAll("pOneBig");
+      destroyAll("purpleMenuBg");
+      destroyAll("allPlayerCell");
+      destroyAll("allGreenCell");
+      destroyAll("cellContainer");
+      destroyAll("p1Sel");
+      go("menu");
     });
     /*--------------------------------------------------------------------------------*/
     scene("playerTwoSelectMenu", (j) => {
+      playerMenuSound.play();
       let k = 0;
 
       const playerTwoBigFace = (k) => {
@@ -329,73 +338,42 @@ async function playerSelectMenu() {
       onKeyPress("right", () => {
         if (k < 8) {
           ++k;
-          p2.moveTo(allCellCenter[k]),
-            every("pTwoBig", (e) => {
-              e.destroy();
-              playerTwoBigFace(k);
-            });
+          p2.moveTo(allCellCenter[k]), play("menuNav");
+          destroyAll("pTwoBig");
+          playerTwoBigFace(k);
         }
       });
 
       onKeyPress("left", () => {
         if (k > 0) {
           --k;
-          p2.moveTo(allCellCenter[k]),
-            every("pTwoBig", (e) => {
-              e.destroy();
-              playerTwoBigFace(k);
-            });
+          p2.moveTo(allCellCenter[k]), play("menuNav");
+          destroyAll("pTwoBig");
+          playerTwoBigFace(k);
         }
       });
       onKeyPress("enter", () => {
-        every("pTwoBig", (e) => {
-          e.destroy();
-        });
-        every("pOneBig", (e) => {
-          e.destroy();
-        });
-        every("purpleMenuBg", (e) => {
-          e.destroy();
-        });
-        for (let i = 0; i <= 8; i++) {
-          every(`${allPlayers[i]}Cell`, (e) => {
-            e.destroy();
-          });
-          every(`cell${i}`, (e) => {
-            e.destroy();
-          });
-        }
-        every("cellContainer", (e) => {
-          e.destroy();
-        });
-        every("p1Sel", (e) => {
-          e.destroy();
-        });
+        play("select");
+        playerMenuSound.stop();
         p2.destroy();
+        destroyAll("pTwoBig");
+        destroyAll("pOneBig");
+        destroyAll("purpleMenuBg");
+        destroyAll("allGreenCell");
+        destroyAll("allPlayerCell");
+        destroyAll("cellContainer");
+        destroyAll("p1Sel");
         go("game", j, k);
       });
 
       onKeyPress("d", () => {
-        every("pTwoBig", (e) => {
-          e.destroy();
-        });
-        every("purpleMenuBg", (e) => {
-          e.destroy();
-        });
-        for (let i = 0; i <= 8; i++) {
-          every(`${allPlayers[i]}Cell`, (e) => {
-            e.destroy();
-          });
-          every(`cell${i}`, (e) => {
-            e.destroy();
-          });
-        }
-        every("cellContainer", (e) => {
-          e.destroy();
-        });
-        every("p1Sel", (e) => {
-          e.destroy();
-        });
+        playerMenuSound.stop();
+        destroyAll("pTwoBig");
+        destroyAll("purpleMenuBg");
+        destroyAll("allGreenCell");
+        destroyAll("allPlayerCell");
+        destroyAll("cellContainer");
+        destroyAll("p1Sel");
         go("playerOneSelectMenu");
       });
     });

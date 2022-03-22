@@ -3504,10 +3504,22 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
             return c == null ? void 0 : c.name;
           },
           flipX(o) {
-            n.flipX = o;
+            if (o === true) {
+              n.flipX = true;
+            }
+            if (o === false) {
+              n.flipX = false;
+            }
+            return n.flipX;
           },
           flipY(o) {
-            n.flipY = o;
+            if (o === true) {
+              n.flipY = true;
+            }
+            if (o === false) {
+              n.flipY = false;
+            }
+            return n.flipY;
           },
           onAnimEnd(o, d) {
             return this.on("animEnd", (h) => {

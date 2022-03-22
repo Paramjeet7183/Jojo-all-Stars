@@ -12,7 +12,6 @@ const allStage = {
       sprite("stageOneBg2"),
       pos(0, height()),
       origin("botleft"),
-      fixed(),
       scale(Math.max(width() / 1280, height() / 720)),
       z(1),
     ]);
@@ -23,7 +22,6 @@ const allStage = {
       sprite("stageTwoBg1"),
       pos(center()),
       origin("bot"),
-      fixed(),
       scale(Math.max(width() / 2000, height() / 375)),
       z(0),
     ]);

@@ -1,20 +1,10 @@
 const jojo = {
-  name: "jojo", //sprite name
-  displayName: "johnny Joestar",
-  speed: 256, // how fast can he run
-  jumpForce: 1, //how high can he jump
-  attackDamage: {
-    // damages of different attacks
-    punches: 5,
-    shootAct1: 10,
-    shootAct2: 16,
-  },
-  tag: "johnny", // tag of player for seperting him from another players
-
-  //loading assets of player
-  loadAsset: function () {
+  name: "johnny",
+  speed: 256,
+  jumpForce: 1,
+  loadAsset: async function () {
     loadSpriteAtlas("../assets/jhonny/jhonny-Recovered.png", {
-      jojo: {
+      johnny: {
         x: 0,
         y: 0,
         width: 873, //width of sprite sheet
@@ -33,26 +23,14 @@ const jojo = {
           shootAct1_UP: { from: 27, to: 31, speed: 12 },
           shootAct2_1: { from: 32, to: 43, speed: 12 },
           fromPortal: { from: 44, to: 46, speed: 8 },
-          charge: { from: 47, to: 49, speed: 12 },
+          charge: { from: 49, to: 49, speed: 12 },
           hurt: { from: 50, to: 52, speed: 8 },
           fall: { from: 53, to: 56, speed: 8 },
-          pickSteelBall: { from: 57, to: 62, speed: 8 },
-          throwSteelBall: { from: 63, to: 67, speed: 8 },
+          pickSteelBall: { from: 57, to: 62, speed: 16 },
+          throwSteelBall: { from: 63, to: 67, speed: 16 },
           punch3: { from: 68, to: 70, speed: 12 },
-          punch4: { from: 71, to: 75, speed: 12 },
-          shootAct2_DOWN: { from: 76, to: 78, speed: 8 },
-        },
-      },
-    });
-    loadSpriteAtlas("../assets/jhonny/bullet.png", {
-      ActOneBullet: {
-        x: 0,
-        y: 0,
-        width: 188,
-        height: 32,
-        sliceX: 5,
-        anims: {
-          spin: { from: 0, to: 4, speed: 12, loop: true },
+          punch4: { from: 71, to: 75, speed: 16 },
+          shootAct2_DOWN: { from: 76, to: 77, speed: 8 },
         },
       },
     });
@@ -60,52 +38,57 @@ const jojo = {
       bulletTrail: {
         x: 0,
         y: 0,
-        width: 75,
-        height: 32,
-        sliceX: 9,
-        anims: {
-          spin: { from: 0, to: 8, speed: 24, loop: true },
-        },
-      },
-    });
-    loadSpriteAtlas("../assets/jhonny/shootingCloud.png", {
-      shootingCloud: {
-        x: 0,
-        y: 0,
-        width: 3135,
-        height: 438,
-        sliceX: 15,
-        anims: {
-          idle: { from: 0, to: 14, speed: 16 },
-        },
-      },
-    });
-    loadSpriteAtlas("../assets/jhonny/portal.png", {
-      portal: {
-        x: 0,
-        y: 0,
-        width: 1512,
-        height: 186,
-        sliceX: 9,
-        anims: {
-          open: { from: 8, to: 0, speed: 15 },
-          close: { from: 0, to: 8, speed: 15 },
-        },
-      },
-    });
-    loadSpriteAtlas("../assets/jhonny/act3 Down.png", {
-      portalDown: {
-        x: 0,
-        y: 0,
-        width: 678,
-        height: 35,
+        width: 147,
+        height: 49,
         sliceX: 6,
         anims: {
-          idle: { from: 0, to: 5, speed: 16, loop: true },
+          idle: { from: 0, to: 5, speed: 24, loop: true },
         },
+      },
+    });
+    loadSpriteAtlas("../assets/jhonny/act4.png", {
+      tuskAct4: {
+        x: 0,
+        y: 0,
+        width: 600,
+        height: 390,
+        sliceX: 4,
+        sliceY: 3,
+        anims: {
+          idle: { from: 0, to: 0, speed: 1 },
+          beatdown: { from: 1, to: 10, speed: 24, loop: true },
+        },
+      },
+    });
+
+    loadSpriteAtlas("../assets/jhonny/act2.png", {
+      act2: {
+        x: 0,
+        y: 0,
+        width: 2960,
+        height: 2418,
+        sliceX: 4,
+        sliceY: 3,
+        anims: {
+          idle: { from: 0, to: 11, speed: 32 },
+        },
+      },
+    });
+    loadSpriteAtlas("../assets/jhonny/explosion.png", {
+      explosion: {
+        x: 0,
+        y: 0,
+        width: 612,
+        height: 390,
+        sliceX: 3,
+        sliceY: 2,
+        anims: { idle: { from: 0, to: 4, speed: 32 } },
       },
     });
     // loadSound("theme","../assets/jhonny/theme.mp3")
+    loadSprite("bullet2", "../assets/jhonny/07.png");
+    loadSprite("steelBall", "../assets/jhonny/steel.png");
+    loadSprite("tusk3", "../assets/jhonny/tusk3.png");
     loadSound("kaiten", "../assets/jhonny/kaiten.wav");
     loadSound("tusk", "../assets/jhonny/tusk.wav");
     loadSound("charge1", "../assets/jhonny/charge (1).wav");
@@ -119,134 +102,275 @@ const jojo = {
     loadSound("attack4", "../assets/jhonny/attack (4).wav");
     // loadSound("attack5","../assets/jhonny/attack (5).wav")
     loadSound("attack6", "../assets/jhonny/attack (6).wav");
-    // loadSound("attack7","../assets/jhonny/attack (7).wav")
-  },
+    loadSound("chummi1", "../assets/jhonny/chummi (1).wav");
+    loadSound("chummi2", "../assets/jhonny/chummi (2).wav");
+    loadSound("yoshi", "../assets/jhonny/yoshi.wav");
+    loadSound("final", "../assets/jhonny/final.wav");
+    loadSound("ora1", "../assets/jhonny/ora (1).wav");
+    loadSound("ora2", "../assets/jhonny/ora (2).wav");
+    loadSound("stand", "../assets/jhonny/stand appearing.wav");
+    loadSound("stand2", "../assets/jhonny/stand appearing (2).wav");
+    loadSound("standp", "../assets/jhonny/stand punch.wav");
+    loadSound("hurt1", "../assets/jhonny/hurt (1).wav");
+    loadSound("hurt2", "../assets/jhonny/hurt (2).wav");
+    loadSound("hurt3", "../assets/jhonny/hurt (3).wav");
+    loadSound("hurt4", "../assets/jhonny/hurt (4).wav");
+    loadSound("hurt5", "../assets/jhonny/hurt (5).wav");
+    loadSound("hurt6", "../assets/jhonny/hurt (6).wav");
 
-  // all attacks of players
+    loadSound("attack7", "../assets/jhonny/attack (7).wav");
+  },
   attacks: {
-    canAttack: true, //can player attack
-    keyCount: 0, //for counting key counts when pressing repeatedly
-    stand: 2, //for counting evolution of johnnys stand
-    fired: false,
-    //------------------------------------------------------------
-    bullet: function (
-      player,
-      direction,
-      bulletX,
-      bulletY,
-      angleBullet,
-      trailX,
-      trailY,
-      angleTrail
-    ) {
-      //bullet
+    hitBox: function ({ w, h, position, delay, timeOut, org, tag }) {
+      wait(delay, () => {
+        const box = add([
+          rect(w, h),
+          area(),
+          color(YELLOW),
+          pos(position),
+          origin(org),
+          opacity(0),
+          lifespan(timeOut),
+          `${tag}`,
+        ]);
+      });
+    },
+    bullet: async function ({ position, dir, speed, angle, xOffset, yOffset }) {
       const bulletObj = add([
-        sprite("ActOneBullet", { anim: "spin" }),
+        sprite("bullet2"),
         area(),
         origin("center"),
-        cleanup(), //for destroying after its not in view
+        cleanup(),
         outview({ hide: true }),
-        scale(1),
+        scale(0.5),
+        rotate(angle),
         layer("effect"),
-        rotate(angleBullet),
-        pos(player.pos.add(bulletX, bulletY)),
-        move(direction, 2000),
-        "bullet",
+        pos(position),
+        move(dir, speed),
+        "johnnyBullet",
       ]);
       wait(0.04, () => {
         bulletObj.onUpdate(() => {
-          //trail that will follow the bullet
           const trail = add([
-            sprite("bulletTrail", { anim: "spin" }),
+            sprite("bulletTrail", { anim: "idle" }),
             area(),
             origin("center"),
-            pos(bulletObj.pos.sub(trailX, trailY)),
+            pos(bulletObj.pos.sub(xOffset, yOffset)),
             cleanup(),
             layer("effect"),
-            rotate(angleTrail),
+            rotate(angle),
             outview(),
-            scale(1),
-            "trail",
+            lifespan(0.2),
+            opacity(0.7),
+            scale(0.6),
+            "johnnyBulletTrail",
           ]);
-          //if bullet is outofView destroy the trail
-          if (bulletObj.isOutOfView()) {
-            revery("trail", (e) => {
-              e.destroy();
-            });
-          }
         });
       });
     },
-    //------------------------------------------------------------
-    //
-    bulletCloud: function (player, x, y, angle) {
-      const cloudObj = add([
-        sprite("shootingCloud", { anim: "idle" }),
+    tuskAct3: async function (player) {
+      play("bulletActivate");
+      play("chummi1");
+      player.play("shootAct1_1");
+      const a = add([
+        sprite("act2", { anim: "idle" }),
         area(),
-        scale(0.3),
-        layer("effect"),
+        pos(player.pos.add(0, -36 * vh)),
         origin("center"),
-        rotate(angle),
-        pos(player.pos.add(x, y)),
+        layer("effect"),
+        lifespan(0.4),
+        scale(0.5),
       ]);
-      wait(0.4, () => {
-        destroy(cloudObj);
+      wait(0.35, () => {
+        const t = add([
+          sprite("tusk3"),
+          area(),
+          pos(a.pos),
+          origin("center"),
+          layer("effect"),
+          lifespan(1),
+          scale(2),
+        ]);
+        if (player.flipX()) {
+          this.bullet({
+            position: player.pos.add(-6 * vw, -26 * vh),
+            dir: vec2(-1, 0),
+            speed: 2512,
+            angle: 180,
+            xOffset: -6 * vw,
+            yOffset: 0,
+          });
+          player.move(100 * vw, 0);
+          a.flipX(true);
+          t.flipX(true);
+        }
+        if (!player.flipX()) {
+          this.bullet({
+            position: player.pos.add(6 * vw, -26 * vh),
+            dir: vec2(1, 0),
+            speed: 2512,
+            angle: 180,
+            xOffset: -6 * vw,
+            yOffset: 0,
+          });
+          player.move(-100 * vw, 0);
+          a.flipX(false);
+          t.flipX(false);
+        }
+        play("bulletSound");
       });
     },
-    //------------------------------------------------------------
-    //
-    portal: function (x, y) {
-      const portalObj = add([
-        sprite("portal", { anim: "open" }),
-        area(),
-        origin("bot"),
-        layer("effect"),
-        scale(3),
-        pos(x, y),
-        "por",
-      ]);
-      portalObj.onAnimEnd("open", () => {
-        portalObj.play("close");
+    final: async function ({ player, enemy }) {
+      player.play("pickSteelBall");
+      play("final");
+      play("bulletActivate");
+      wait(0.5, () => {
+        player.play("throwSteelBall");
+        wait(0.2, () => {
+          play("bulletSound");
+          const steelBall = add([
+            sprite("steelBall"),
+            area(),
+            pos(player.pos.add(4 * vw, -26 * vh)),
+            origin("center"),
+            layer("effect"),
+            move(RIGHT, 1500),
+            lifespan(1),
+            "steelBall",
+          ]);
+          steelBall.onCollide("HurtBox", () => {
+            steelBall.destroy();
+            play("stand2");
+            const a = add([
+              sprite("act2", { anim: "idle" }),
+              area(),
+              pos(steelBall.pos.sub(6 * vw, 0)),
+              origin("center"),
+              layer("effect"),
+              lifespan(0.4),
+              scale(0.5),
+            ]);
+            wait(0.3, () => {
+              const s = add([
+                sprite("tuskAct4", {
+                  anim: "idle",
+                  width: 22.5 * vw,
+                  height: 40 * vh,
+                }),
+                pos(steelBall.pos),
+                origin("center"),
+                layer("effect"),
+                lifespan(7),
+              ]);
+              wait(0.6, () => {
+                s.onUpdate(() => {
+                  // w,h,position,delay,timeOut,org
+                  this.hitBox({
+                    w: 64,
+                    h: 16,
+                    position: s.pos.add(rand(-8, 8) * vw, rand(-10, 10) * vh),
+                    delay: 0,
+                    timeOut: 0.1,
+                    org: "botleft",
+                    tag: "tuskHitBox",
+                  });
+                  //explosion effect;
+                  const ex = add([
+                    sprite("explosion", { anim: "idle" }),
+                    pos(s.pos.add(rand(-8, 8) * vw, rand(-10, 10) * vh)),
+                    origin("botleft"),
+                    layer("effect"),
+                    scale(0.5),
+                    opacity(0.8),
+                    lifespan(0.1),
+                  ]);
+                });
+                s.play("beatdown");
+                let a = play("standp", { loop: true });
+                let b = play("ora1", { loop: true });
+                wait(5, () => {
+                  b.stop();
+                  let c = play("ora2");
+                  wait(1, () => {
+                    a.stop();
+                  });
+                });
+              });
+            });
+          });
+        });
       });
     },
-    //------------------------------------------------------------
-    portalDown: function (player, faceDir) {
-      const portalDownObj = add([
-        sprite("portalDown", { anim: "idle" }),
-        area(),
-        origin("bot"),
-        layer("effect"),
-        scale(1),
-        pos(player.pos.sub(0, 32)),
-        move(faceDir, 512),
-      ]);
-    },
-    //------------------------------------------------------------
-    // attack_A means a attack which will be assigned to key "A"
-    attack_A: function (player, isFlip) {
+    canAttack: true,
+    keyCount: 0,
+    stand: 1,
+    attack_A: async function ({ player, enemy }) {
       if (this.canAttack) {
         player.play("punch4");
         play("attack6");
         this.canAttack = false;
+        if (player.flipX()) {
+          // hitBox: function ({w, h, position, delay, timeOut, origin, tag}) {
+          this.hitBox({
+            w: 14 * vw,
+            h: 2 * vh,
+            position: player.pos.add(0, -9 * vh),
+            delay: 0.2,
+            timeOut: 0.2,
+            org: "right",
+            tag: "johnnyPunch",
+          });
+        }
+        if (!player.flipX()) {
+          this.hitBox({
+            w: 14 * vw,
+            h: 2 * vh,
+            position: player.pos.add(0, -9 * vh),
+            delay: 0.2,
+            timeOut: 0.2,
+            org: "left",
+            tag: "johnnyPunch",
+          });
+        }
       }
       wait(0.5, () => {
         this.canAttack = true;
       });
     },
-
-    //------------------------------------------------------------
-    attack_S: function (player, enemyPos, isFlip) {
-      //only run this if player canAttack == true
+    attack_S: async function ({ player, enemy }) {
       if (this.canAttack) {
-        //playing single punch animation
         player.play("punch");
-        play("attack2");
         this.canAttack = false;
+        if (player.flipX()) {
+          this.hitBox({
+            w: 6 * vw,
+            h: 4 * vh,
+            position: player.pos.add(0, -22 * vh),
+            delay: 0.2,
+            timeOut: 0.2,
+            org: "right",
+            tag: "johnnyPunch",
+          });
+          player.move(-100 * vw, 0);
+        }
+        if (!player.flipX()) {
+          this.hitBox({
+            w: 6 * vw,
+            h: 4 * vh,
+            position: player.pos.add(0, -22 * vh),
+            delay: 0.2,
+            timeOut: 0.2,
+            org: "left",
+            tag: "johnnyPunch",
+          });
+          player.move(100 * vw, 0);
+        }
+        play("attack2");
         wait(0.4, () => {
           this.canAttack = true;
         });
-        //only hit 3 punch when near the opponent
-        if (Math.abs(player.pos.x - enemyPos.x) <= 64) {
+
+        if (Math.abs(player.pos.x - enemy.pos.x) <= 128) {
           if (isKeyPressedRepeat("s")) {
             player.play("punch");
             //count number of times key is pressed
@@ -261,12 +385,56 @@ const jojo = {
             //wait 0.4 sec for first attack to finish
             wait(0.4, () => {
               player.play("punch2");
+              if (player.flipX()) {
+                this.hitBox({
+                  w: 6 * vw,
+                  h: 8 * vh,
+                  position: player.pos.add(0, -16 * vh),
+                  delay: 0.2,
+                  timeOut: 0.2,
+                  org: "right",
+                  tag: "johnnyPunch",
+                });
+              }
+              if (!player.flipX()) {
+                this.hitBox({
+                  w: 6 * vw,
+                  h: 8 * vh,
+                  position: player.pos.add(0, -16 * vh),
+                  delay: 0.2,
+                  timeOut: 0.2,
+                  org: "left",
+                  tag: "johnnyPunch",
+                });
+              }
               play("attack3");
               //wait 0.5 sec for second attack to finish
               wait(0.5, () => {
                 //stop previous attack and begin the next attack
                 player.stop("punch2");
                 player.play("punch3");
+                if (player.flipX()) {
+                  this.hitBox({
+                    w: 6 * vw,
+                    h: 2 * vh,
+                    position: player.pos.add(0, -25 * vh),
+                    delay: 0.2,
+                    timeOut: 0.2,
+                    org: "right",
+                    tag: "johnnyPunch",
+                  });
+                }
+                if (!player.flipX()) {
+                  this.hitBox({
+                    w: 6 * vw,
+                    h: 2 * vh,
+                    position: player.pos.add(0, -25 * vh),
+                    delay: 0.2,
+                    timeOut: 0.2,
+                    org: "left",
+                    tag: "johnnyPunch",
+                  });
+                }
                 play("attack4");
                 //set canAttack to TRUE so player can attack after this ends
                 this.canAttack = true;
@@ -278,238 +446,211 @@ const jojo = {
         }
       }
     },
-
-    //------------------------------------------------------------
-
-    attack_D: function (player, enemyPos, isFlip) {
-      let faceDir;
-      if (isFlip) {
-        faceDir = LEFT;
-      } else {
-        if (!isFlip) {
-          faceDir = RIGHT;
-        }
-      }
-      //check if "down" key is being pressed AND is johnny stand is Evolved because this attack will only activate in act 2
-      if (isKeyDown("down") && this.canAttack) {
-        player.play("shootAct2_DOWN");
-        wait(0.2, () => {
-          this.portalDown(player, faceDir);
-        });
-      } else {
-        // checking for "up" key being pressed
-        if (isKeyDown("up") && this.canAttack) {
-          //playing shooting up animation
-          player.play("shootAct1_UP");
-          //play kaiten sound
-          play("kaiten");
-          //waiting for animation to rech final frame
-          wait(0.43, () => {
-            //spawing bullet obj,direction,bulletX,bulletY,bulletAngle,trailX,trailY,trailAngle
-            if (faceDir == RIGHT) {
-              this.bullet(player, vec2(1, -0.75), 32, -200, -45, 28, -28, -45);
-              this.bulletCloud(player, 32, -186, -45);
-            }
-            if (faceDir == LEFT) {
-              this.bullet(
-                player,
-                vec2(-1, -0.75),
-                -32,
-                -200,
-                -135,
-                -28,
-                -28,
-                45
-              );
-              this.bulletCloud(player, -32, -186, -135);
-            }
-            // playing bullet firing sound
-            play("bulletSound");
-          });
-          //setting can attack to false after shooting UP
+    attack_D: async function ({ player, enemy }) {
+      if (this.canAttack) {
+        if (isKeyDown("down")) {
+          play("bulletActivate");
+          player.play("shootAct2_DOWN");
           this.canAttack = false;
-          wait(0.6, () => {
-            // setting canAttack to true after animation ends
+          wait(0.3, () => {
             this.canAttack = true;
           });
         } else {
-          //checking if player can attack or not
-          if (this.canAttack) {
-            //playing shooting animation
-            player.play("shootAct1_1");
-            //playing taski sound
-            play("tusk");
-            play("bulletActivate");
-            //waiting to reach final frame
-            wait(0.43, () => {
-              //shoot in face Direction
-              if (faceDir == RIGHT) {
-                //spawning bullet obj,direction,bulletX,bulletY,bulletAngle,trailX,trailY,trailAngle
-                this.bullet(player, vec2(1, 0), 100, -180, 0, 96, 0, 0);
-                this.bulletCloud(player, 100, -180, 0);
-              }
-              if (faceDir == LEFT) {
-                this.bullet(player, vec2(-1, 0), -100, -180, 0, -96, 0, 0);
-                this.bulletCloud(player, -100, -180, -180);
-              }
-              //playing bullet firing sound
-              play("bulletSound2");
-            });
-            //setting can Attack to false to prevent interference between attacks
+          if (isKeyDown("up")) {
+            play("bulletActivate", { volume: 0.6 });
+            player.play("shootAct1_UP");
+            play("kaiten", { volume: 0.5 });
             this.canAttack = false;
-            wait(0.6, () => {
-              //setting attack to true so player can attack after one attack is finished
-              this.canAttack = true;
+            wait(0.3, () => {
+              if (player.flipX()) {
+                //position,dir,speed,angle,xOffset,yOffset
+                this.bullet({
+                  position: player.pos.add(-3 * vw, -32 * vh),
+                  dir: vec2(-1, -0.75),
+                  speed: 2512,
+                  angle: 45,
+                  xOffset: -4 * vw,
+                  yOffset: -6 * vh,
+                });
+                player.move(100 * vw, 0);
+              }
+              if (!player.flipX()) {
+                this.bullet({
+                  position: player.pos.add(3 * vw, -32 * vh),
+                  dir: vec2(1, -0.75),
+                  speed: 2512,
+                  angle: -45,
+                  xOffset: 4 * vw,
+                  yOffset: -6 * vh,
+                });
+                player.move(-100 * vw, 0);
+              }
+              play("bulletSound2", { volume: 1 });
+              wait(0.3, () => {
+                this.canAttack = true;
+              });
+            });
+          } else {
+            play("bulletActivate", { volume: 0.6 });
+            player.play("shootAct1_1");
+            play("tusk", { volume: 0.5 });
+            this.canAttack = false;
+            wait(0.3, () => {
+              if (player.flipX()) {
+                //position,dir,speed,angle,xOffset,yOffset
+                this.bullet({
+                  position: player.pos.add(-3 * vw, -26 * vh),
+                  dir: vec2(-1, 0),
+                  speed: 2512,
+                  angle: 180,
+                  xOffset: -6 * vw,
+                  yOffset: 0,
+                });
+                player.move(100 * vw, 0);
+              }
+              if (!player.flipX()) {
+                this.bullet({
+                  position: player.pos.add(3 * vw, -26 * vh),
+                  dir: vec2(1, 0),
+                  speed: 2512,
+                  angle: 0,
+                  xOffset: 6 * vw,
+                  yOffset: 0,
+                });
+                player.move(-100 * vw, 0);
+              }
+              play("bulletSound", { volume: 1 });
+              wait(0.3, () => {
+                this.canAttack = true;
+              });
             });
           }
         }
       }
     },
-
-    //------------------------------------------------------------
-
-    attack_W: function (player, enemyPos, isFlip) {
+    attack_W: async function ({ player, enemy }) {
       if (this.canAttack) {
+        // this.tuskAct3(player)
+        this.final({ player: player, enemy: enemy });
         this.canAttack = false;
-        //play shooting himself animation
-        player.play("shootAct2_1");
-
-        //TODO:- implement stand evolution login when charge is full
-        /*
-                if(charge==100){
-                    this.stand++;
-                }
-                */
-
-        // open portal at player position
-        this.portal(player.pos.x - 64, player.pos.y - 32);
-        // wait for animation to end and destroy portal
-        wait(1, () => {
-          every("por", (e) => {
-            e.destroy();
-          });
-          //open portal at which position you are moving
-          this.portal(2000 - 64, player.pos.y - 32);
-          //wait for portal animation to start
-          wait(0.3, () => {
-            player.moveTo(2000, player.pos.y);
-            player.play("fromPortal");
-            wait(1.3, () => {
-              every("por", (e) => {
-                e.destroy();
-                this.canAttack = true;
-              });
-            });
-          });
+        wait(0.5, () => {
+          this.canAttack = true;
         });
+        // this.final(player,enemyPos);
       }
     },
-
-    //---------------------------------------------------------------
-
-    charge: function (player) {
-      player.play("charge");
-      if (!this.fired) {
-        this.fired = true;
-        play("charge1");
-        wait(1.5, () => {
-          this.fired = false;
-        });
-      }
-    },
-  }, //main function ends
-  allAnim: [
-    "punch",
-    "punch2",
-    "punch3",
-    "punch4",
-    "shootAct1_1",
-    "shootAct1_2",
-    "shootAct1_UP",
-    "shootAct2_1",
-    "shootAct2_DOWN",
-    "hurt",
-    "charge",
-  ],
-  allHitBox: [
-    {
-      anim: "punch",
-      pos: { x: 0, y: -186 },
-      timeOut: 0.3,
-      wait: 0.2,
-      w: 128,
-      h: 20,
-      tag: "jojoPunchTag",
-    },
-    {
-      anim: "punch2",
-      pos: { x: 0, y: -186 },
-      timeOut: 0.3,
-      wait: 0.2,
-      w: 128,
-      h: 20,
-      tag: "jojoPunch2Tag",
-    },
-    {
-      anim: "punch3",
-      pos: { x: 0, y: -186 },
-      timeOut: 0.3,
-      wait: 0.2,
-      w: 128,
-      h: 20,
-      tag: "jojoPunch3Tag",
-    },
-    {
-      anim: "punch4",
-      pos: { x: 0, y: -64 },
-      timeOut: 0.3,
-      wait: 0.2,
-      w: 400,
-      h: 20,
-      tag: "jojoPunch4Tag",
-    },
-  ],
-  setHitBox: function (player) {
-    for (let i = 0; i <= this.allHitBox.length - 1; i++) {
-      player.onAnimStart(this.allHitBox[i].anim, () => {
-        wait(this.allHitBox[i].wait, () => {
-          add([
-            rect(this.allHitBox[i].w, this.allHitBox[i].h),
-            area(),
-            layer("effect"),
-            lifespan(this.allHitBox[i].timeOut),
-            origin("center"),
-            color(RED),
-            pos(
-              player.pos.add(this.allHitBox[i].pos.x, this.allHitBox[i].pos.y)
-            ),
-            this.allHitBox[i].tag,
-          ]);
-        });
-      });
-    }
   },
-  setHurtBox: function (player) {
-    const hurt = add([
-      rect(32, 64),
-      area(),
-      pos(player.pos),
-      color(CYAN),
-      origin(vec2(-0.1, -1)),
-      layer("effect"),
-      follow(player, vec2(0, -216)),
-      "hurtBoxUpper",
-    ]);
-    const hurtbox2 = add([
-      rect(16, 64),
-      area(),
-      pos(player.pos),
-      color(CYAN),
-      origin(vec2(0, 1)),
-      layer("effect"),
-      follow(player, vec2(0, -64)),
-      "hurtBoxMid",
-    ]);
+  allTags: {
+    anim: [
+      "run",
+      "crouch",
+      "hurt",
+      "fall",
+      "charge",
+      "punch",
+      "punch2",
+      "shootAct1_1",
+      "shootAct1_2",
+      "shootAct1_UP",
+      "shootAct2_1",
+      "fromPortal",
+      "pickSteelBall",
+      "throwSteelBall",
+      "punch3",
+      "punch4",
+      "shootAct2_DOWN",
+    ],
+    hitBox: ["johnnyPunch", "standPunch"],
+  },
+  collisons: async function ({ enemy, enemyTag, enemyHealth }) {
+    let allBox = `${enemyTag}HurtBox`; //both enemy hurt box;
+    let boxOne = `${enemyTag}HurtBoxOne`; //upper
+    let boxTwo = `${enemyTag}HurtBoxTwo`; //lower
+
+    onCollide(`${allBox}`, "tuskHitBox", () => {
+      enemy.play("hurt");
+      enemyHealth.hurt(0.3);
+      shake(4);
+      if (randi(1, 20) == 4) {
+        play("hurt1"); //playerSpecific sound
+      }
+    });
+    onCollide(boxOne, "johnnyPunch", () => {
+      enemy.play("hurt");
+      play("hurt3");
+      enemyHealth.hurt(0.3);
+      shake(0.1);
+    });
+    onCollide(boxTwo, "johnnyPunch", () => {
+      enemy.play("fall");
+      play("hurt2");
+      enemyHealth.hurt(0.3);
+      shake(0.1);
+    });
+  },
+  hurtBoxData: {
+    idle: {
+      one: {
+        width: 4 * vw,
+        height: 8 * vw,
+        offset: vec2(0, -13 * vh),
+      },
+      two: {
+        width: 8 * vw,
+        height: 4 * vw,
+        offset: vec2(0, -4 * vh),
+      },
+    },
+    crouch: {
+      one: {
+        width: 4 * vw,
+        height: 8 * vw,
+        offset: vec2(4 * vw, -4 * vh),
+      },
+      two: {
+        width: 8 * vw,
+        height: 4 * vw,
+        offset: vec2(0, -4 * vh),
+      },
+    },
+    run: {
+      one: {
+        width: 5.2 * vw,
+        height: 5.2 * vw,
+        offset: vec2(4 * vw, -13 * vh),
+      },
+      two: {
+        width: 8 * vw,
+        height: 4 * vw,
+        offset: vec2(-4 * vw, -4 * vh),
+      },
+    },
+    setHurtBox: async function (player, h1, h2) {
+      player.onAnimStart("idle", () => {
+        h1.width = this.idle.one.width;
+        h1.height = this.idle.one.height;
+        h1.offset = this.idle.one.offset;
+        h2.width = this.idle.two.width;
+        h2.height = this.idle.two.height;
+        h2.offset = this.idle.two.offset;
+      });
+      player.onAnimStart("crouch", () => {
+        h1.width = this.crouch.one.width;
+        h1.height = this.crouch.one.height;
+        h1.offset = this.crouch.one.offset;
+        h2.width = this.crouch.two.width;
+        h2.height = this.crouch.two.height;
+        h2.offset = this.crouch.two.offset;
+      });
+      player.onAnimStart("run", () => {
+        h1.width = this.run.one.width;
+        h1.height = this.run.one.height;
+        h1.offset = this.run.one.offset;
+        h2.width = this.run.two.width;
+        h2.height = this.run.two.height;
+        h2.offset = this.run.two.offset;
+      });
+    },
   },
 };
 

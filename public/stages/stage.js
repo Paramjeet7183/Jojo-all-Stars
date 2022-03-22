@@ -16,8 +16,6 @@ async function stage(stageNum) {
     allStage.stageTwo,
     allStage.stageThree,
   ];
-  let vw = 0.01 * width();
-  let vh = 0.01 * height();
 
   const left = add([
     rect(2, 100 * vh),
@@ -26,6 +24,7 @@ async function stage(stageNum) {
     pos(0, height()),
     origin("botleft"),
     color(RED),
+    opacity(0),
     layer("effect"),
   ]);
   const right = add([
@@ -34,6 +33,7 @@ async function stage(stageNum) {
     solid(),
     pos(width(), height()),
     origin("botright"),
+    opacity(0),
     color(RED),
     layer("effect"),
   ]);
@@ -46,8 +46,9 @@ async function stage(stageNum) {
     color(RED),
     origin("botleft"),
     opacity(0.5),
+    opacity(0),
     layer("effect"),
   ]);
-  stageArray[stageNum]();
+  stageArray[stageNum](); //running stage function
 }
 export default stage;
