@@ -20,7 +20,7 @@ const menu = {
     loadSprite("p2s", "../assets/menu/p2s.png");
 
     loadSound("intro", "../assets/sound/intro.wav");
-    loadSound("jotaro", "../assets/sound/jotaroIntro.wav");
+    loadSound("jotaroIntro", "../assets/sound/jotaroIntro.wav");
     loadSound("menu", "../assets/sound/menu.wav");
     loadSound("playerMenu", "../assets/sound/player.wav");
     loadSound("menuNav", "../assets/sound/menuNav.wav");
@@ -29,7 +29,7 @@ const menu = {
 
   introScene: async function () {
     scene("intro", () => {
-      const jotaroSound = play("jotaro");
+      const jotaroSound = play("jotaroIntro");
       const introSound = play("intro", {
         loop: true,
       });
@@ -39,10 +39,7 @@ const menu = {
       //intro cover with game title
       const cover = add([
         sprite("cover"),
-        area(),
         pos(center()),
-        outview(),
-        cleanup(),
         scale(Math.max(width() / 1280, height() / 720)),
         origin("center"),
         z(0),
@@ -57,7 +54,6 @@ const menu = {
             scale: wave(1, 1.4, time() * 6),
           }),
         }),
-        area(),
         pos(width() / 2, height() - 64),
         origin("center"),
         z(1),
@@ -70,12 +66,12 @@ const menu = {
         introSound.stop();
       });
 
-      onClick("coverObj", () => {
-        txt.destroy();
-        cover.destroy();
-        go("menu");
-        introSound.stop();
-      });
+//       onClick("coverObj", () => {
+//         txt.destroy();
+//         cover.destroy();
+//         go("menu");
+//         introSound.stop();
+//       });
     });
   }, //introScene function ends here
 
