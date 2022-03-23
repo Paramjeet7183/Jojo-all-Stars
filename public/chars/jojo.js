@@ -91,17 +91,13 @@ const jojo = {
     loadSprite("tusk3", "../assets/jhonny/tusk3.png");
     loadSound("kaiten", "../assets/jhonny/kaiten.wav");
     loadSound("tusk", "../assets/jhonny/tusk.wav");
-    loadSound("charge1", "../assets/jhonny/charge (1).wav");
-    loadSound("charge2", "../assets/jhonny/charge (2).wav");
+    loadSound("johnnyCharge1", "../assets/jhonny/charge (1).wav");
+    loadSound("johnnyCharge2", "../assets/jhonny/charge (2).wav");
     loadSound("bulletSound", "../assets/jhonny/bulletSound.wav");
     loadSound("bulletSound2", "../assets/jhonny/bulletSound2.wav");
     loadSound("bulletActivate", "../assets/jhonny/bulletActivate.wav");
-    // loadSound("attack1","../assets/jhonny/attack (1).wav")
+    loadSound("attack1", "../assets/jhonny/attack (1).wav");
     loadSound("attack2", "../assets/jhonny/attack (2).wav");
-    loadSound("attack3", "../assets/jhonny/attack (3).wav");
-    loadSound("attack4", "../assets/jhonny/attack (4).wav");
-    // loadSound("attack5","../assets/jhonny/attack (5).wav")
-    loadSound("attack6", "../assets/jhonny/attack (6).wav");
     loadSound("chummi1", "../assets/jhonny/chummi (1).wav");
     loadSound("chummi2", "../assets/jhonny/chummi (2).wav");
     loadSound("yoshi", "../assets/jhonny/yoshi.wav");
@@ -115,12 +111,13 @@ const jojo = {
     loadSound("hurt2", "../assets/jhonny/hurt (2).wav");
     loadSound("hurt3", "../assets/jhonny/hurt (3).wav");
     loadSound("hurt4", "../assets/jhonny/hurt (4).wav");
-    loadSound("hurt5", "../assets/jhonny/hurt (5).wav");
-    loadSound("hurt6", "../assets/jhonny/hurt (6).wav");
-
-    loadSound("attack7", "../assets/jhonny/attack (7).wav");
   },
   attacks: {
+    hExist: false,
+    canAttack: true,
+    keyCount: 0,
+    fired: false,
+    stand: 1,
     hitBox: function ({ w, h, position, delay, timeOut, org, tag }) {
       wait(delay, () => {
         const box = add([
@@ -129,10 +126,16 @@ const jojo = {
           color(YELLOW),
           pos(position),
           origin(org),
-          opacity(0),
+          opacity(0.3),
           lifespan(timeOut),
           `${tag}`,
         ]);
+        if (box.exists()) {
+          this.hExist = true;
+          wait(timeOut, () => {
+            this.hExist = false;
+          });
+        }
       });
     },
     bullet: async function ({ position, dir, speed, angle, xOffset, yOffset }) {
@@ -153,13 +156,10 @@ const jojo = {
         bulletObj.onUpdate(() => {
           const trail = add([
             sprite("bulletTrail", { anim: "idle" }),
-            area(),
             origin("center"),
             pos(bulletObj.pos.sub(xOffset, yOffset)),
-            cleanup(),
             layer("effect"),
             rotate(angle),
-            outview(),
             lifespan(0.2),
             opacity(0.7),
             scale(0.6),
@@ -174,21 +174,19 @@ const jojo = {
       player.play("shootAct1_1");
       const a = add([
         sprite("act2", { anim: "idle" }),
-        area(),
         pos(player.pos.add(0, -36 * vh)),
         origin("center"),
-        layer("effect"),
         lifespan(0.4),
+        layer("effect"),
         scale(0.5),
       ]);
       wait(0.35, () => {
         const t = add([
           sprite("tusk3"),
-          area(),
           pos(a.pos),
           origin("center"),
-          layer("effect"),
           lifespan(1),
+          layer("effect"),
           scale(2),
         ]);
         if (player.flipX()) {
@@ -220,7 +218,16 @@ const jojo = {
         play("bulletSound");
       });
     },
-    final: async function ({ player, enemy }) {
+    final: async function ({
+      player,
+      enemy,
+      dir,
+      ballPos,
+      standFlip,
+      standOrigin,
+      expOrigin,
+      expPos,
+    }) {
       player.play("pickSteelBall");
       play("final");
       play("bulletActivate");
@@ -231,10 +238,10 @@ const jojo = {
           const steelBall = add([
             sprite("steelBall"),
             area(),
-            pos(player.pos.add(4 * vw, -26 * vh)),
+            pos(ballPos),
             origin("center"),
             layer("effect"),
-            move(RIGHT, 1500),
+            move(dir, 1500),
             lifespan(1),
             "steelBall",
           ]);
@@ -243,14 +250,14 @@ const jojo = {
             play("stand2");
             const a = add([
               sprite("act2", { anim: "idle" }),
-              area(),
               pos(steelBall.pos.sub(6 * vw, 0)),
               origin("center"),
               layer("effect"),
               lifespan(0.4),
               scale(0.5),
-            ]);
+            ]); //effect
             wait(0.3, () => {
+              //tuskAct4
               const s = add([
                 sprite("tuskAct4", {
                   anim: "idle",
@@ -258,30 +265,37 @@ const jojo = {
                   height: 40 * vh,
                 }),
                 pos(steelBall.pos),
-                origin("center"),
+                origin(standOrigin),
                 layer("effect"),
                 lifespan(7),
               ]);
+              s.flipX(standFlip);
               wait(0.6, () => {
                 s.onUpdate(() => {
-                  // w,h,position,delay,timeOut,org
-                  this.hitBox({
-                    w: 64,
-                    h: 16,
-                    position: s.pos.add(rand(-8, 8) * vw, rand(-10, 10) * vh),
-                    delay: 0,
-                    timeOut: 0.1,
-                    org: "botleft",
-                    tag: "tuskHitBox",
-                  });
+                  if (!this.hExist) {
+                    this.hitBox({
+                      w: 64,
+                      h: 16,
+                      position: s.pos.add(rand(-8, 8) * vw, rand(-10, 10) * vh),
+                      delay: 0,
+                      timeOut: 0.1,
+                      org: "botleft",
+                      tag: "tuskHitBox",
+                    });
+                  }
                   //explosion effect;
                   const ex = add([
                     sprite("explosion", { anim: "idle" }),
-                    pos(s.pos.add(rand(-8, 8) * vw, rand(-10, 10) * vh)),
-                    origin("botleft"),
-                    layer("effect"),
+                    pos(
+                      s.pos.add(
+                        randi(expPos.x, -expPos.x) * vw,
+                        randi(expPos.y, -expPos.y) * vh
+                      )
+                    ),
+                    origin(expOrigin),
                     scale(0.5),
                     opacity(0.8),
+                    layer("effect"),
                     lifespan(0.1),
                   ]);
                 });
@@ -301,16 +315,13 @@ const jojo = {
         });
       });
     },
-    canAttack: true,
-    keyCount: 0,
-    stand: 1,
-    attack_A: async function ({ player, enemy }) {
+    attack_A: async function ({ player, enemy, keys, chargeMeter }) {
       if (this.canAttack) {
-        player.play("punch4");
-        play("attack6");
         this.canAttack = false;
+        player.play("punch4");
+        play("punchWooshSound5");
+        play("attack2");
         if (player.flipX()) {
-          // hitBox: function ({w, h, position, delay, timeOut, origin, tag}) {
           this.hitBox({
             w: 14 * vw,
             h: 2 * vh,
@@ -332,14 +343,17 @@ const jojo = {
             tag: "johnnyPunch",
           });
         }
+        wait(0.5, () => {
+          this.canAttack = true;
+        });
       }
-      wait(0.5, () => {
-        this.canAttack = true;
-      });
     },
-    attack_S: async function ({ player, enemy }) {
+    attack_S: async function ({ player, enemy, chargeMeter }) {
       if (this.canAttack) {
         player.play("punch");
+        play("punchWooshSound4", { volume: 1 });
+        play("attack1");
+        chargeMeter.discharge(3);
         this.canAttack = false;
         if (player.flipX()) {
           this.hitBox({
@@ -365,92 +379,18 @@ const jojo = {
           });
           player.move(100 * vw, 0);
         }
-        play("attack2");
-        wait(0.4, () => {
+
+        wait(0.6, () => {
           this.canAttack = true;
         });
-
-        if (Math.abs(player.pos.x - enemy.pos.x) <= 128) {
-          if (isKeyPressedRepeat("s")) {
-            player.play("punch");
-            //count number of times key is pressed
-            this.keyCount++;
-          }
-          //if key is pressed 3 times
-          if (this.keyCount == 3) {
-            //set canAttack to false so player can only attack when one attack is finished
-            this.canAttack = false;
-            //play punch attack
-            player.play("punch");
-            //wait 0.4 sec for first attack to finish
-            wait(0.4, () => {
-              player.play("punch2");
-              if (player.flipX()) {
-                this.hitBox({
-                  w: 6 * vw,
-                  h: 8 * vh,
-                  position: player.pos.add(0, -16 * vh),
-                  delay: 0.2,
-                  timeOut: 0.2,
-                  org: "right",
-                  tag: "johnnyPunch",
-                });
-              }
-              if (!player.flipX()) {
-                this.hitBox({
-                  w: 6 * vw,
-                  h: 8 * vh,
-                  position: player.pos.add(0, -16 * vh),
-                  delay: 0.2,
-                  timeOut: 0.2,
-                  org: "left",
-                  tag: "johnnyPunch",
-                });
-              }
-              play("attack3");
-              //wait 0.5 sec for second attack to finish
-              wait(0.5, () => {
-                //stop previous attack and begin the next attack
-                player.stop("punch2");
-                player.play("punch3");
-                if (player.flipX()) {
-                  this.hitBox({
-                    w: 6 * vw,
-                    h: 2 * vh,
-                    position: player.pos.add(0, -25 * vh),
-                    delay: 0.2,
-                    timeOut: 0.2,
-                    org: "right",
-                    tag: "johnnyPunch",
-                  });
-                }
-                if (!player.flipX()) {
-                  this.hitBox({
-                    w: 6 * vw,
-                    h: 2 * vh,
-                    position: player.pos.add(0, -25 * vh),
-                    delay: 0.2,
-                    timeOut: 0.2,
-                    org: "left",
-                    tag: "johnnyPunch",
-                  });
-                }
-                play("attack4");
-                //set canAttack to TRUE so player can attack after this ends
-                this.canAttack = true;
-                //set keyCount to ZERO so player can again hit 3 punches
-                this.keyCount = 0;
-              });
-            });
-          }
-        }
       }
     },
-    attack_D: async function ({ player, enemy }) {
-      if (this.canAttack) {
+    attack_D: async function ({ player, enemy, chargeMeter }) {
+      if (this.canAttack && chargeMeter.getWidth() > 1 * vw) {
         if (isKeyDown("down")) {
           play("bulletActivate");
           player.play("shootAct2_DOWN");
+          chargeMeter.discharge(10);
           this.canAttack = false;
           wait(0.3, () => {
             this.canAttack = true;
@@ -485,6 +425,7 @@ const jojo = {
                 });
                 player.move(-100 * vw, 0);
               }
+              chargeMeter.discharge(10);
               play("bulletSound2", { volume: 1 });
               wait(0.3, () => {
                 this.canAttack = true;
@@ -519,6 +460,7 @@ const jojo = {
                 });
                 player.move(-100 * vw, 0);
               }
+              chargeMeter.discharge(10);
               play("bulletSound", { volume: 1 });
               wait(0.3, () => {
                 this.canAttack = true;
@@ -528,16 +470,95 @@ const jojo = {
         }
       }
     },
-    attack_W: async function ({ player, enemy }) {
-      if (this.canAttack) {
-        // this.tuskAct3(player)
-        this.final({ player: player, enemy: enemy });
+    attack_W: async function ({ player, enemy, chargeMeter }) {
+      if (this.canAttack && chargeMeter.getWidth() >= 11 * vw) {
+        console.log(this.stand);
+        if (this.stand < 4) {
+          this.stand++;
+        }
+        if (this.stand == 2) {
+          this.tuskAct3(player);
+          chargeMeter.discharge(100);
+        }
+        if (this.stand >= 3) {
+          console.log(this.stand);
+          if (player.flipX()) {
+            this.final({
+              player: player,
+              enemy: enemy,
+              ballPos: player.pos.add(-4 * vw, -26 * vh),
+              standFlip: true,
+              dir: LEFT,
+              expPos: { x: 4, y: 10 },
+              standOrigin: "center",
+              expOrigin: "botright",
+            });
+          }
+          if (!player.flipX()) {
+            this.final({
+              player: player,
+              enemy: enemy,
+              ballPos: player.pos.add(4 * vw, -26 * vh),
+              standFlip: false,
+              dir: RIGHT,
+              expPos: { x: 8, y: 10 },
+              standOrigin: "center",
+              expOrigin: "botleft",
+            });
+          }
+          chargeMeter.discharge(100);
+        }
         this.canAttack = false;
         wait(0.5, () => {
           this.canAttack = true;
         });
-        // this.final(player,enemyPos);
       }
+    },
+    charge: async function ({ player, chargeMeter }) {
+      player.play("charge");
+      chargeMeter.charge(0.5);
+      if (!this.fired) {
+        this.fired = true;
+        play(choose(["johnnyCharge1", "johnnyCharge2"]));
+        wait(1.5, () => {
+          this.fired = false;
+        });
+      }
+    },
+    collisons: async function ({ enemy, enemyTag, enemyHealth }) {
+      let allBox = `${enemyTag}HurtBox`; //both enemy hurt box;
+      let boxOne = `${enemyTag}HurtBoxOne`; //upper
+      let boxTwo = `${enemyTag}HurtBoxTwo`; //lower
+
+      onCollide(`${allBox}`, "tuskHitBox", () => {
+        enemy.play("hurt");
+        enemyHealth.hurt(1);
+        shake(4);
+        play("punchSound1");
+        play("hurt1");
+      });
+      onCollide(boxOne, "johnnyPunch", () => {
+        enemy.play("hurt");
+        play("hurt3");
+        play("punchSound1");
+        enemyHealth.hurt(1.5);
+
+        shake(1.2);
+      });
+      onCollide(boxTwo, "johnnyPunch", () => {
+        enemy.play("fall");
+        play("hurt2");
+        play("punchSound1");
+        enemyHealth.hurt(1);
+        shake(1.2);
+      });
+      onCollide(allBox, "johnnyBullet", () => {
+        enemy.play("hurt");
+        play("hurt2");
+        destroyAll("johnnyBullet");
+        enemyHealth.hurt(this.stand * 2);
+        shake(2);
+      });
     },
   },
   allTags: {
@@ -561,32 +582,6 @@ const jojo = {
       "shootAct2_DOWN",
     ],
     hitBox: ["johnnyPunch", "standPunch"],
-  },
-  collisons: async function ({ enemy, enemyTag, enemyHealth }) {
-    let allBox = `${enemyTag}HurtBox`; //both enemy hurt box;
-    let boxOne = `${enemyTag}HurtBoxOne`; //upper
-    let boxTwo = `${enemyTag}HurtBoxTwo`; //lower
-
-    onCollide(`${allBox}`, "tuskHitBox", () => {
-      enemy.play("hurt");
-      enemyHealth.hurt(0.3);
-      shake(4);
-      if (randi(1, 20) == 4) {
-        play("hurt1"); //playerSpecific sound
-      }
-    });
-    onCollide(boxOne, "johnnyPunch", () => {
-      enemy.play("hurt");
-      play("hurt3");
-      enemyHealth.hurt(0.3);
-      shake(0.1);
-    });
-    onCollide(boxTwo, "johnnyPunch", () => {
-      enemy.play("fall");
-      play("hurt2");
-      enemyHealth.hurt(0.3);
-      shake(0.1);
-    });
   },
   hurtBoxData: {
     idle: {

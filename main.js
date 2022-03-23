@@ -8,7 +8,7 @@ menu.introScene();
 menu.menuScene();
 playerSelectMenu();
 Game();
-go("game");
+go("intro");
 
 onKeyPress("v", () => {
   play("tusk");

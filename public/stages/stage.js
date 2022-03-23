@@ -48,6 +48,7 @@ async function stage(stageNum) {
     opacity(0.5),
     opacity(0),
     layer("effect"),
+    "plat",
   ]);
   stageArray[stageNum](); //running stage function
 }

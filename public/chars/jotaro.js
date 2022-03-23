@@ -1,7 +1,7 @@
 const jotaro = {
   name: "jotaro",
   speed: 50 * vw,
-  jumpForce: 800,
+  jumpForce: 1200,
   loadAsset: function () {
     loadSpriteAtlas("../assets/jotaro/jotaro.png", {
       jotaro: {
@@ -39,7 +39,7 @@ const jotaro = {
           punch: { from: 2, to: 8, speed: 16 },
           punch2: { from: 9, to: 17, speed: 16, loop: true },
           punchUp: { from: 18, to: 24, speed: 8, loop: true },
-          jumpPunchDown: { from: 27, to: 29, speed: 16 },
+          jumpPunchDown: { from: 27, to: 29, speed: 12 },
           jumpPunchDown2: { from: 30, to: 35, speed: 16, loop: true },
           oraora: { from: 41, to: 66, speed: 24, loop: true },
           punchDown: { from: 67, to: 70, speed: 16 },
@@ -59,6 +59,7 @@ const jotaro = {
   //--------------------------------------------------------
 
   attacks: {
+    hExist: false,
     canAttack: true,
     keyCount: 0,
     fired: false,
@@ -71,10 +72,16 @@ const jotaro = {
           // outline(4, YELLOW),
           pos(position),
           origin(org),
-          opacity(0),
+          opacity(0.3),
           lifespan(timeOut),
           `${tag}`,
         ]);
+        if (box.exists()) {
+          this.hExist = true;
+          wait(timeOut, () => {
+            this.hExist = false;
+          });
+        }
       });
     },
     stand: async function ({
@@ -93,7 +100,6 @@ const jotaro = {
           width: 2.5 * 9 * vw,
           height: 2.5 * 16 * vw,
         }),
-        area({ width: 0, height: 0 }),
         lifespan(timeOut),
         pos(position),
         scale(1),
@@ -111,33 +117,35 @@ const jotaro = {
       });
       if (loop) {
         starPlatinum.onUpdate(() => {
-          if (starPlatinum.flipX()) {
-            this.hitBox({
-              w: hw,
-              h: hh,
-              position: starPlatinum.pos.add(
-                rand(hposition.x, 2 * hposition.x) * vw,
-                rand(-hposition.y, -2 * hposition.y) * vh
-              ),
-              delay: hdelay,
-              timeOut: htimeOut,
-              org: "botright",
-              tag: "starPlatinumPunch",
-            });
-          }
-          if (!starPlatinum.flipX()) {
-            this.hitBox({
-              w: hw,
-              h: hh,
-              position: starPlatinum.pos.add(
-                rand(hposition.x, 2 * hposition.x) * vw,
-                rand(-hposition.y, -2 * hposition.y) * vh
-              ),
-              delay: hdelay,
-              timeOut: htimeOut,
-              org: "botleft",
-              tag: "starPlatinumPunch",
-            });
+          if (!this.hExist) {
+            if (starPlatinum.flipX()) {
+              this.hitBox({
+                w: hw,
+                h: hh,
+                position: starPlatinum.pos.add(
+                  rand(hposition.x, 2 * hposition.x) * vw,
+                  rand(-hposition.y, -2 * hposition.y) * vh
+                ),
+                delay: hdelay,
+                timeOut: htimeOut,
+                org: "botright",
+                tag: "starPlatinumPunch",
+              });
+            }
+            if (!starPlatinum.flipX()) {
+              this.hitBox({
+                w: hw,
+                h: hh,
+                position: starPlatinum.pos.add(
+                  rand(hposition.x, 2 * hposition.x) * vw,
+                  rand(-hposition.y, -2 * hposition.y) * vh
+                ),
+                delay: hdelay,
+                timeOut: htimeOut,
+                org: "botleft",
+                tag: "starPlatinumPunch",
+              });
+            }
           }
         });
       }
@@ -167,10 +175,12 @@ const jotaro = {
       }
     },
     //------------------------------------------------------------
-    attack_A: async function ({ player, enemy }) {
-      if (isKeyDown("down") && this.canAttack) {
+    attack_A: async function ({ player, enemy, keys, chargeMeter }) {
+      if (isKeyDown(keys.down) && this.canAttack) {
         player.play("kick");
         play("muh");
+        play("punchWooshSound4", { volume: 1 });
+
         if (player.flipX()) {
           this.hitBox({
             w: 7 * vw,
@@ -198,13 +208,16 @@ const jotaro = {
           this.canAttack = true;
         });
       } else {
-        if (isKeyDown("up") && this.canAttack) {
+        if (isKeyDown(keys.up) && this.canAttack) {
           play("orayo");
+          wait(0.15, () => {
+            play("punchWooshSound3", { volume: 1 });
+          });
           if (player.flipX()) {
             this.stand({
               timeOut: 0.4,
               anim: "jumpPunchDown",
-              position: player.pos.add(-24 * vw, 13 * vh),
+              position: player.pos.add(-18 * vw, 16 * vh),
               dir: vec2(-0.3, 0.4),
               moveSpeed: 256,
               flip: true,
@@ -214,7 +227,7 @@ const jotaro = {
                 hh: 8 * vw,
                 hdelay: 0.15,
                 htimeOut: 0.15,
-                hposition: vec2(-16 * vw, 0 * vh),
+                hposition: vec2(-12 * vw, -8 * vh),
               },
             });
           }
@@ -222,7 +235,7 @@ const jotaro = {
             this.stand({
               timeOut: 0.3,
               anim: "jumpPunchDown",
-              position: player.pos.add(-8 * vw, 13 * vh),
+              position: player.pos.add(-6 * vw, 16 * vh),
               dir: vec2(0.3, 0.4),
               moveSpeed: 256,
               flip: false,
@@ -232,7 +245,7 @@ const jotaro = {
                 hh: 8 * vw,
                 hdelay: 0.15,
                 htimeOut: 0.15,
-                hposition: vec2(16 * vw, 0 * vh),
+                hposition: vec2(12 * vw, -8 * vh),
               },
             });
           }
@@ -241,13 +254,16 @@ const jotaro = {
             this.canAttack = true;
           });
         } else {
-          if (this.canAttack) {
-            play("ora4");
+          if (this.canAttack && player.isGrounded()) {
+            play("ora4", { volume: 0.5 });
+            wait(0.2, () => {
+              play("punchWooshSound3", { volume: 1 });
+            });
             if (player.flipX()) {
               this.stand({
                 timeOut: 0.3,
                 anim: "punch",
-                position: player.pos.add(-24 * vw, 13 * vh),
+                position: player.pos.add(-16 * vw, 16 * vh),
                 dir: vec2(-1, 0),
                 moveSpeed: 256,
                 flip: true,
@@ -257,7 +273,7 @@ const jotaro = {
                   hh: 4 * vw,
                   hdelay: 0.15,
                   htimeOut: 0.15,
-                  hposition: vec2(-7 * vw, -26 * vh),
+                  hposition: vec2(-4 * vw, -32 * vh),
                 },
               });
             }
@@ -265,7 +281,7 @@ const jotaro = {
               this.stand({
                 timeOut: 0.3,
                 anim: "punch",
-                position: player.pos.add(-8 * vw, 13 * vh),
+                position: player.pos.add(-8 * vw, 16 * vh),
                 dir: vec2(1, 0),
                 moveSpeed: 256,
                 flip: false,
@@ -275,7 +291,7 @@ const jotaro = {
                   hh: 4 * vw,
                   hdelay: 0.15,
                   htimeOut: 0.15,
-                  hposition: vec2(26 * vw, -26 * vh),
+                  hposition: vec2(19 * vw, -32 * vh),
                 },
               });
             }
@@ -289,10 +305,11 @@ const jotaro = {
     },
 
     //------------------------------------------------------------
-    attack_S: async function ({ player, enemy }) {
-      if (this.canAttack) {
-        play("muh");
+    attack_S: async function ({ player, enemy, keys, chargeMeter }) {
+      if (this.canAttack && player.isGrounded()) {
         player.play("punch");
+        play("muh");
+        play("punchWooshSound4");
         if (player.flipX()) {
           this.hitBox({
             w: 4 * vw,
@@ -323,15 +340,22 @@ const jotaro = {
     },
 
     //------------------------------------------------------------
-    attack_D: async function ({ player, enemy }) {
+    attack_D: async function ({ player, enemy, keys, chargeMeter }) {
       //todo
-      if (isKeyDown("down") && this.canAttack) {
+      if (
+        isKeyDown(keys.down) &&
+        this.canAttack &&
+        chargeMeter.getWidth() > 0.5 * vw
+      ) {
         play("ora4");
+        wait(0.2, () => {
+          play("punchWooshSound5", { volume: 1 });
+        });
         if (player.flipX()) {
           this.stand({
             timeOut: 0.6,
             anim: "punchDown",
-            position: player.pos.add(-24 * vw, 13 * vh),
+            position: player.pos.add(-18 * vw, 18 * vh),
             dir: vec2(-1, 0),
             moveSpeed: 128,
             flip: true,
@@ -341,7 +365,7 @@ const jotaro = {
               hh: 8 * vw,
               hdelay: 0.2,
               htimeOut: 0.3,
-              hposition: vec2(-10 * vw, -16 * vh),
+              hposition: vec2(-8 * vw, -18 * vh),
             },
           });
         }
@@ -349,7 +373,7 @@ const jotaro = {
           this.stand({
             timeOut: 0.6,
             anim: "punchDown",
-            position: player.pos.add(-8 * vw, 13 * vh),
+            position: player.pos.add(-6 * vw, 18 * vh),
             dir: vec2(1, 0),
             moveSpeed: 128,
             flip: false,
@@ -359,7 +383,7 @@ const jotaro = {
               hh: 8 * vw,
               hdelay: 0.2,
               htimeOut: 0.3,
-              hposition: vec2(20 * vw, -16 * vh),
+              hposition: vec2(14 * vw, -18 * vh),
             },
           });
         }
@@ -368,13 +392,24 @@ const jotaro = {
           this.canAttack = true;
         });
       } else {
-        if (isKeyDown("up") && this.canAttack) {
+        if (
+          isKeyDown(keys.up) &&
+          this.canAttack &&
+          chargeMeter.getWidth() > 0.5 * vw
+        ) {
           play("ooh");
+          play("punchWooshSound3", { volume: 1 });
+          wait(0.2, () => {
+            play("punchWooshSound3", { volume: 1 });
+            wait(0.2, () => {
+              play("punchWooshSound3", { volume: 1 });
+            });
+          });
           if (player.flipX()) {
             this.stand({
               timeOut: 0.6,
               anim: "jumpPunchDown2",
-              position: player.pos.add(-20 * vw, 5 * vh),
+              position: player.pos.add(-16 * vw, 16 * vh),
               dir: vec2(-0.3, 0.4),
               moveSpeed: 256,
               flip: true,
@@ -384,7 +419,7 @@ const jotaro = {
                 hh: 1 * vw,
                 hdelay: 0,
                 htimeOut: 0.2,
-                hposition: { x: 10, y: 8 },
+                hposition: { x: 8, y: 12 },
               },
             });
           }
@@ -392,7 +427,7 @@ const jotaro = {
             this.stand({
               timeOut: 0.6,
               anim: "jumpPunchDown2",
-              position: player.pos.add(-20 * vw, 5 * vh),
+              position: player.pos.add(-10 * vw, 16 * vh),
               dir: vec2(0.3, 0.4),
               moveSpeed: 256,
               flip: false,
@@ -402,7 +437,7 @@ const jotaro = {
                 hh: 1 * vw,
                 hdelay: 0,
                 htimeOut: 0.2,
-                hposition: { x: 16, y: 8 },
+                hposition: { x: 8, y: 12 },
               },
             });
           }
@@ -411,17 +446,31 @@ const jotaro = {
           player.paused = true;
           wait(0.7, () => {
             player.paused = false;
-            this.canAttack = true;
+            wait(0.8, () => {
+              this.canAttack = true;
+            });
           });
         } else {
-          if (this.canAttack) {
+          if (
+            this.canAttack &&
+            player.isGrounded() &&
+            chargeMeter.getWidth() > 0.5 * vw
+          ) {
+            chargeMeter.discharge(10);
             play("ooh");
+            play("punchWooshSound3", { volume: 1 });
+            wait(0.2, () => {
+              play("punchWooshSound3", { volume: 1 });
+              wait(0.2, () => {
+                play("punchWooshSound3", { volume: 1 });
+              });
+            });
             player.play("pose1");
             if (player.flipX()) {
               this.stand({
                 timeOut: 0.6,
                 anim: "punch2",
-                position: player.pos.add(-24 * vw, 10 * vh),
+                position: player.pos.add(-16 * vw, 20 * vh),
                 dir: vec2(-1, 0),
                 moveSpeed: 256,
                 flip: true,
@@ -431,7 +480,7 @@ const jotaro = {
                   hh: 1 * vw,
                   hdelay: 0,
                   htimeOut: 0.2,
-                  hposition: { x: 10, y: 20 },
+                  hposition: { x: 8, y: 25 },
                 },
               });
             }
@@ -439,7 +488,7 @@ const jotaro = {
               this.stand({
                 timeOut: 0.6,
                 anim: "punch2",
-                position: player.pos.add(-8 * vw, 10 * vh),
+                position: player.pos.add(-4 * vw, 20 * vh),
                 dir: vec2(1, 0),
                 moveSpeed: 256,
                 flip: false,
@@ -449,7 +498,7 @@ const jotaro = {
                   hh: 1 * vw,
                   hdelay: 0,
                   htimeOut: 0.2,
-                  hposition: { x: 10, y: 20 },
+                  hposition: { x: 8, y: 25 },
                 },
               });
             }
@@ -463,8 +512,12 @@ const jotaro = {
     },
 
     //------------------------------------------------------------
-    attack_W: async function ({ player, enemy }) {
-      if (Math.abs(player.pos.x - enemy.pos.x) <= 25 * vw && this.canAttack) {
+    attack_W: async function ({ player, enemy, keys, chargeMeter }) {
+      if (
+        Math.abs(player.pos.x - enemy.pos.x) <= 25 * vw &&
+        this.canAttack &&
+        chargeMeter.getWidth() >= 10 * vw
+      ) {
         play("starplatinum");
         player.play("pose2");
         wait(0.5, () => {
@@ -472,7 +525,7 @@ const jotaro = {
             this.stand({
               timeOut: 10,
               anim: "oraora",
-              position: player.pos.add(-32 * vw, 13 * vh),
+              position: player.pos.add(-20 * vw, 18 * vh),
               dir: vec2(-1, 0),
               moveSpeed: 0,
               flip: true,
@@ -482,7 +535,7 @@ const jotaro = {
                 hh: 1 * vw,
                 hdelay: 0,
                 htimeOut: 0.2,
-                hposition: { x: 10, y: 20 },
+                hposition: { x: 8, y: 20 },
               },
             });
           }
@@ -490,7 +543,7 @@ const jotaro = {
             this.stand({
               timeOut: 10,
               anim: "oraora",
-              position: player.pos.add(2 * vw, 13 * vh),
+              position: player.pos.add(2 * vw, 18 * vh),
               dir: vec2(1, 0),
               moveSpeed: 0,
               flip: false,
@@ -500,7 +553,7 @@ const jotaro = {
                 hh: 1 * vw,
                 hdelay: 0,
                 htimeOut: 0.2,
-                hposition: { x: 10, y: 20 },
+                hposition: { x: 8, y: 20 },
               },
             });
           }
@@ -523,8 +576,16 @@ const jotaro = {
 
     //---------------------------------------------------------------
 
-    charge: async function ({ player, enemy }) {
-      console.log("charge");
+    charge: async function ({ player, chargeMeter }) {
+      player.play("pose1");
+      chargeMeter.charge(0.5);
+      if (!this.fired) {
+        this.fired = true;
+        play("charge1");
+        wait(1.5, () => {
+          this.fired = false;
+        });
+      }
     },
   },
   allTags: {
@@ -545,27 +606,38 @@ const jotaro = {
     let allBox = `${enemyTag}HurtBox`; //both enemy hurt box;
     let boxOne = `${enemyTag}HurtBoxOne`; //upper
     let boxTwo = `${enemyTag}HurtBoxTwo`; //lower
-    let j = 0;
     onCollide(`${allBox}`, "starPlatinumPunch", () => {
       enemy.play("hurt");
-      enemyHealth.hurt(0.3);
-      if (j % 50 == 0) {
-        play("hurt1");
-      }
-      j++;
-      shake(1);
+      enemyHealth.hurt(1);
+      play("hurt1");
+      play("punchSound2");
+      enemy.paused = true;
+      wait(1, () => {
+        enemy.paused = false;
+      });
+      shake(4);
     });
     onCollide(boxOne, "jotaroPunch", () => {
       enemy.play("hurt");
       play("hurt3");
-      enemyHealth.hurt(0.3);
-      shake(0.1);
+      play("punchSound2");
+      enemyHealth.hurt(1.5);
+      enemy.paused = true;
+      wait(0.3, () => {
+        enemy.paused = false;
+      });
+      shake(1.5);
     });
     onCollide(boxTwo, "jotaroPunch", () => {
       enemy.play("fall");
       play("hurt2");
-      enemyHealth.hurt(0.3);
-      shake(0.1);
+      play("punchSound2");
+      enemyHealth.hurt(1.5);
+      enemy.paused = true;
+      wait(0.3, () => {
+        enemy.paused = false;
+      });
+      shake(1.5);
     });
   },
   hurtBoxData: {

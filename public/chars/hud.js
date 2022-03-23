@@ -3,11 +3,13 @@ loadSprite("lose", "../assets/hud/lose.png");
 loadSprite("healthBar", "../assets/hud/health.png");
 loadSprite("timer", "../assets/hud/timer.png");
 loadSprite("charge", "../assets/hud/charge.png");
-loadSprite("johnny11", "../assets/hud/johnny.png");
+loadSprite("johnnyIcon", "../assets/hud/johnny.png");
+loadSprite("jotaroIcon", "../assets/hud/jotaro.png");
 
 class healthBar {
-  constructor(
+  constructor({
     playerName,
+    displayName,
     xFrame,
     yFrame,
     originFrame,
@@ -18,11 +20,10 @@ class healthBar {
     ySmallBar,
     healthBarColor,
     xPlayerImage,
-    yPlayerImage
-  ) {
+    yPlayerImage,
+  }) {
     this.timerFrame = add([
       sprite("timer", { width: 4 * vw, height: 4 * vw }),
-      area(),
       pos(center().x, 8 * vh),
       origin("center"),
       layer("hud"),
@@ -32,7 +33,6 @@ class healthBar {
     ]);
     this.healthFrame = add([
       sprite("healthBar", { width: 32 * vw, height: 6 * vh }),
-      area(),
       pos(this.timerFrame.pos.sub(xFrame, yFrame)),
       origin(originFrame),
       layer("hud"),
@@ -41,7 +41,6 @@ class healthBar {
     ]);
     this.bigHealthBar = add([
       rect(14 * vw, 3 * vh),
-      area(),
       pos(this.healthFrame.pos.sub(xBigBar, yBigBar)),
       color(healthBarColor),
       origin(originBigBar),
@@ -51,7 +50,6 @@ class healthBar {
     ]);
     this.smallHealthBar = add([
       rect(9.5 * vw, 2 * vh),
-      area(),
       pos(this.healthFrame.pos.sub(xSmallBar, ySmallBar)),
       origin(originBigBar),
       color(healthBarColor),
@@ -60,8 +58,7 @@ class healthBar {
       z(0),
     ]);
     this.playerImage = add([
-      sprite("johnny11", { width: 7 * vw, height: 7 * vw }),
-      area(),
+      sprite(`${playerName}Icon`, { width: 7 * vw, height: 7 * vw }),
       pos(this.healthFrame.pos.sub(xPlayerImage, yPlayerImage)),
       origin(`bot${originFrame}`),
       layer("hud"),
@@ -69,10 +66,9 @@ class healthBar {
       z(0),
     ]);
     this.playerNameFrame = add([
-      text(`johnny joestar`, {
+      text(`${displayName}`, {
         size: 1 * vw,
       }),
-      area(),
       pos(this.healthFrame.pos.sub(0, 4 * vh)),
       origin(`bot${originFrame}`),
       layer("hud"),
@@ -115,17 +111,16 @@ class healthBar {
 }
 
 class chargeBar {
-  constructor(
+  constructor({
     xChargeFrame,
     yChargeFrame,
     originFrame,
     xCharge,
     yCharge,
-    originCharge
-  ) {
+    originCharge,
+  }) {
     this.chargeFrame = add([
       sprite("charge", { width: 16 * vw, height: 6 * vh }),
-      area(),
       pos(xChargeFrame, 100 * vh),
       origin(`bot${originFrame}`),
       layer("hud"),
@@ -134,7 +129,6 @@ class chargeBar {
     ]);
     this.chargeBigBar = add([
       rect(12 * vw, 3 * vh),
-      area(),
       pos(this.chargeFrame.pos.sub(xCharge, 0)),
       origin(originCharge),
       color(BLUE),
@@ -162,6 +156,9 @@ class chargeBar {
     if (this.chargeBigBar.width < 12 * vw) {
       this.chargeBigBar.width += chargePoint * this.chargeUnit;
     }
+  }
+  getWidth() {
+    return this.chargeBigBar.width;
   }
 }
 export { healthBar, chargeBar };

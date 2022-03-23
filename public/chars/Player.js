@@ -1,12 +1,17 @@
 class Player {
   constructor({ dataObj, spawnPos, flip, tag }) {
+    dataObj.loadAsset();
     this.player = add([
       sprite(dataObj.name, { width: 22.5 * vw, height: 40 * vh, anim: "idle" }), //in ratio of 9:16
       area({
-        width: 0,
-        height: 0,
+        width: 5 * vw,
+        height: 6 * vh,
       }),
-      body(),
+      body({
+        weight: 2,
+      }),
+      cleanup(),
+      outview(),
       pos(spawnPos, 70 * vh),
       scale(1),
       layer("players"),
@@ -28,8 +33,6 @@ class Player {
         this.player.play("idle");
       });
     }
-    //load assets of player.
-    dataObj.loadAsset();
     this.player.flipX(flip);
   }
   get() {
