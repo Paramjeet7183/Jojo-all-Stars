@@ -1,4 +1,4 @@
-import k from "./kaboom.js";
+import k from "./public/kaboom.js";
 import Game from "./public/scene/game.js";
 import menu from "./public/scene/menu.js";
 import playerSelectMenu from "./public/scene/playerSelectMenu.js";
