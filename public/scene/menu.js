@@ -20,7 +20,7 @@ const menu = {
     loadSprite("p2s", "../assets/menu/p2s.png");
 
     loadSound("intro", "../assets/sound/intro.wav");
-    loadSound("jotaroIntro", "../assets/sound/jotaroIntro.wav");
+//     loadSound("jotaroIntro", "../assets/sound/jotaroIntro.wav");
     loadSound("menu", "../assets/sound/menu.wav");
     loadSound("playerMenu", "../assets/sound/player.wav");
     loadSound("menuNav", "../assets/sound/menuNav.wav");
@@ -29,11 +29,11 @@ const menu = {
 
   introScene: async function () {
     scene("intro", () => {
-      const jotaroSound = play("jotaroIntro");
+//       const jotaroSound = play("jotaroIntro");
       const introSound = play("intro", {
         loop: true,
       });
-      jotaroSound.play();
+//       jotaroSound.play();
       introSound.play();
       console.log("intro scene is running");
       //intro cover with game title
