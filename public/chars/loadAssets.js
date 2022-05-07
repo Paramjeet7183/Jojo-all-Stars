@@ -313,112 +313,112 @@ async function loadAssets() {
   });
   //--johnny ends
   //avdul---
-  // loadSpriteAtlas("../assets/avdul/avdul.png", {
-  //   avdul: {
-  //     x: 0,
-  //     y: 0,
-  //     width: 2120,
-  //     height: 1278,
-  //     sliceX: 10,
-  //     sliceY: 9,
-  //     anims: {
-  //       idle: { from: 0, to: 7, speed: 24, loop: true },
-  //       crouch: { from: 8, to: 13, speed: 24 },
-  //       walkForward: { from: 15, to: 23, speed: 20, loop: true },
-  //       walkBackward: { from: 23, to: 15, speed: 16, loop: true },
-  //       jump: { from: 25, to: 35, speed: 24 },
-  //       chop: { from: 36, to: 40, speed: 24 },
-  //       kick: { from: 41, to: 45, speed: 24 },
-  //       kick2: { from: 46, to: 53, speed: 24 },
-  //       heavyPunch: { from: 54, to: 62, speed: 24 },
-  //       pose1: { from: 63, to: 67, speed: 24 },
-  //       win: { from: 63, to: 67, speed: 24 },
-  //       pose1loop: { from: 68, to: 71, speed: 24, loop: true },
-  //       upperHurt: { from: 72, to: 72, speed: 24 },
-  //       lowerHurt: { from: 73, to: 73, speed: 24 },
-  //       fall: { from: 73, to: 73, speed: 24 },
-  //       hurt3: { from: 74, to: 74, speed: 24 },
-  //       crouchHurt: { from: 75, to: 75, speed: 24 },
-  //     },
-  //   },
-  // });
-  // loadSprite("avdulIcon", "../assets/hud/avdul.png");
-  // loadSound("avdulHurt1", "../assets/avdul/hurt (1).wav");
-  // loadSound("avdulHurt2", "../assets/avdul/hurt (2).wav");
-  // loadSound("avdulHurt3", "../assets/avdul/hurt (3).wav");
-  // loadSound("avdulStandAppear", "../assets/avdul/standAppear.wav");
-  // loadSound("avdulStand", "../assets/avdul/standName.wav");
-  // loadSpriteAtlas("../assets/avdul/magicianRed.png", {
-  //   magicianRed: {
-  //     x: 0,
-  //     y: 0,
-  //     width: 1414,
-  //     height: 959,
-  //     sliceX: 7,
-  //     sliceY: 7,
-  //     anims: {
-  //       idle: { from: 0, to: 7, speed: 24, loop: true },
-  //       walkForward: { from: 0, to: 7, speed: 24, loop: true },
-  //       walkBackward: { from: 0, to: 7, speed: 24, loop: true },
-  //       jump: { from: 31, to: 42, speed: 24 },
-  //       punch: { from: 8, to: 17, speed: 24 },
-  //       kick: { from: 18, to: 26, speed: 24 },
-  //       throwFireBall: { from: 27, to: 30, speed: 20 },
-  //     },
-  //   },
-  // });
-  // //avdul end -----
-  // //stage_desert---
-  // loadSprite("desertSky", "../assets/stage_desert/2.png");
-  // loadSprite("desertSand", "../assets/stage_desert/1.png");
-  // loadSprite("desertSandBg", "../assets/stage_desert/3.png");
-  // loadSpriteAtlas("../assets/stage_desert/4.png", {
-  //   desertWheel: {
-  //     x: 0,
-  //     y: 0,
-  //     width: 876,
-  //     height: 62,
-  //     sliceX: 6,
-  //     anims: {
-  //       idle: { from: 0, to: 5, speed: 16, loop: true },
-  //     },
-  //   },
-  // });
+  loadSpriteAtlas("../assets/avdul/avdul.png", {
+    avdul: {
+      x: 0,
+      y: 0,
+      width: 2120,
+      height: 1278,
+      sliceX: 10,
+      sliceY: 9,
+      anims: {
+        idle: { from: 0, to: 7, speed: 24, loop: true },
+        crouch: { from: 8, to: 13, speed: 24 },
+        walkForward: { from: 15, to: 23, speed: 20, loop: true },
+        walkBackward: { from: 23, to: 15, speed: 16, loop: true },
+        jump: { from: 25, to: 35, speed: 24 },
+        chop: { from: 36, to: 40, speed: 24 },
+        kick: { from: 41, to: 45, speed: 24 },
+        kick2: { from: 46, to: 53, speed: 24 },
+        heavyPunch: { from: 54, to: 62, speed: 24 },
+        pose1: { from: 63, to: 67, speed: 24 },
+        win: { from: 63, to: 67, speed: 24 },
+        pose1loop: { from: 68, to: 71, speed: 24, loop: true },
+        upperHurt: { from: 72, to: 72, speed: 24 },
+        lowerHurt: { from: 73, to: 73, speed: 24 },
+        fall: { from: 73, to: 73, speed: 24 },
+        hurt3: { from: 74, to: 74, speed: 24 },
+        crouchHurt: { from: 75, to: 75, speed: 24 },
+      },
+    },
+  });
+  loadSprite("avdulIcon", "../assets/hud/avdul.png");
+  loadSound("avdulHurt1", "../assets/avdul/hurt (1).wav");
+  loadSound("avdulHurt2", "../assets/avdul/hurt (2).wav");
+  loadSound("avdulHurt3", "../assets/avdul/hurt (3).wav");
+  loadSound("avdulStandAppear", "../assets/avdul/standAppear.wav");
+  loadSound("avdulStand", "../assets/avdul/standName.wav");
+  loadSpriteAtlas("../assets/avdul/magicianRed.png", {
+    magicianRed: {
+      x: 0,
+      y: 0,
+      width: 1414,
+      height: 959,
+      sliceX: 7,
+      sliceY: 7,
+      anims: {
+        idle: { from: 0, to: 7, speed: 24, loop: true },
+        walkForward: { from: 0, to: 7, speed: 24, loop: true },
+        walkBackward: { from: 0, to: 7, speed: 24, loop: true },
+        jump: { from: 31, to: 42, speed: 24 },
+        punch: { from: 8, to: 17, speed: 24 },
+        kick: { from: 18, to: 26, speed: 24 },
+        throwFireBall: { from: 27, to: 30, speed: 20 },
+      },
+    },
+  });
+  //avdul end -----
+  //stage_desert---
+  loadSprite("desertSky", "../assets/stage_desert/2.png");
+  loadSprite("desertSand", "../assets/stage_desert/1.png");
+  loadSprite("desertSandBg", "../assets/stage_desert/3.png");
+  loadSpriteAtlas("../assets/stage_desert/4.png", {
+    desertWheel: {
+      x: 0,
+      y: 0,
+      width: 876,
+      height: 62,
+      sliceX: 6,
+      anims: {
+        idle: { from: 0, to: 5, speed: 16, loop: true },
+      },
+    },
+  });
   //stage_desert---
   //stage train--
   loadSprite("trainBg", "../assets/stage_training/1.png");
   loadSprite("trainGround", "../assets/stage_training/2.png");
   //stage train--
   //stage beach--
-  // loadSprite("beachSky", "../assets/stage_beach/4.png");
-  // loadSprite("beachTreeBg", "../assets/stage_beach/3.png");
-  // loadSprite("beachBush", "../assets/stage_beach/1.png");
-  // loadSpriteAtlas("../assets/stage_beach/2.png", {
-  //   beachWater: {
-  //     x: 0,
-  //     y: 0,
-  //     width: 624,
-  //     height: 48,
-  //     sliceX: 3,
-  //     anims: {
-  //       idle: { from: 0, to: 2, speed: 8, loop: true },
-  //     },
-  //   },
-  // });
-  // //stage beach--
-  // loadSprite("jail", "../assets/stage_jail/jail.png");
-  // loadSprite("school", "../assets/stage_school/school.png");
-  // loadSprite("injured", "../assets/stage_school/injured.png", {
-  //   x: 0,
-  //   y: 0,
-  //   width: 285,
-  //   height: 72,
-  //   sliceX: 3,
-  //   sliceY: 2,
-  //   anims: {
-  //     idle: { from: 0, to: 4, speed: 8, loop: true },
-  //   },
-  // });
+  loadSprite("beachSky", "../assets/stage_beach/4.png");
+  loadSprite("beachTreeBg", "../assets/stage_beach/3.png");
+  loadSprite("beachBush", "../assets/stage_beach/1.png");
+  loadSpriteAtlas("../assets/stage_beach/2.png", {
+    beachWater: {
+      x: 0,
+      y: 0,
+      width: 624,
+      height: 48,
+      sliceX: 3,
+      anims: {
+        idle: { from: 0, to: 2, speed: 8, loop: true },
+      },
+    },
+  });
+  //stage beach--
+  loadSprite("jail", "../assets/stage_jail/jail.png");
+  loadSprite("school", "../assets/stage_school/school.png");
+  loadSprite("injured", "../assets/stage_school/injured.png", {
+    x: 0,
+    y: 0,
+    width: 285,
+    height: 72,
+    sliceX: 3,
+    sliceY: 2,
+    anims: {
+      idle: { from: 0, to: 4, speed: 8, loop: true },
+    },
+  });
   window.charSound = 0.24;
   window.bgm = 0.6;
   window.punchSound = 0.45;
