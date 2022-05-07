@@ -1,13 +1,14 @@
-import Game from "./game.js";
 async function playerSelectMenu() {
-  scene("playerOneSelectMenu", () => {
+  scene("playerOneSelectMenu", ({ mode }) => {
+    console.log("playerOneSel", mode);
     const playerMenuSound = play("playerMenu", {
       loop: true,
+      volume: 0.25,
     });
     const allPlayers = [
       "johnny",
       "jotaro",
-      "johnny",
+      "avdul",
       "jotaro",
       "johnny",
       "jotaro",
@@ -17,11 +18,8 @@ async function playerSelectMenu() {
     ];
     const purpleBg = add([
       sprite("purpleBg", { height: height() * 64, tiled: true }),
-      area(),
       pos(center()),
       origin("center"),
-      outview(),
-      cleanup(),
       stay(),
       z(0),
       "purpleMenuBg",
@@ -43,11 +41,10 @@ async function playerSelectMenu() {
     });
     const cellContainer = add([
       rect(50 * vw, 50 * vh),
-      area(),
       pos(center()),
       origin("center"),
-      color(RED),
-      opacity(0.5),
+      color(BLACK),
+      opacity(0),
       stay(),
       z(2),
       "cellContainer",
@@ -132,11 +129,10 @@ async function playerSelectMenu() {
     for (let i = 0; i <= cellPosArray.length - 1; i++) {
       const cell = add([
         rect(33 * rvw, 33 * rvh),
-        area(),
         pos(cellPosArray[i].pos),
         origin(cellPosArray[i].origin),
-        color(GREEN),
-        opacity(0.5),
+        color(BLACK),
+        opacity(0.3),
         stay(),
         `cell${i}`,
         "allGreenCell",
@@ -217,7 +213,6 @@ async function playerSelectMenu() {
           width: getAllCell[i].width * 0.6,
           height: getAllCell[i].height * 0.8,
         }),
-        area(),
         pos(allCellCenter[i]),
         scale(1),
         stay(),
@@ -232,11 +227,11 @@ async function playerSelectMenu() {
     const playerOneBigFace = (j) => {
       add([
         sprite(`${allPlayers[j]}BigFace`),
-        area(),
         pos(0, height()),
         origin("botleft"),
         stay(),
-        scale(Math.min(width() / 1280, height() / 720)),
+        scale(0.8), //Math.min(width() / 1280, height() / 720)
+        layer("pvp"),
         z(1),
         "pOneBig",
       ]);
@@ -246,9 +241,8 @@ async function playerSelectMenu() {
         width: getAllCell[j].width * 0.6,
         height: getAllCell[j].height * 0.8,
       }),
-      area(),
       pos(allCellCenter[j]),
-      scale(1),
+      scale(1.2),
       origin("center"),
       z(2),
     ]);
@@ -259,10 +253,9 @@ async function playerSelectMenu() {
           width: getAllCell[j].width * 0.6,
           height: getAllCell[j].height * 0.8,
         }),
-        area(),
         stay(),
         pos(allCellCenter[j]),
-        scale(1),
+        scale(1.2),
         origin("center"),
         z(3),
         "p1Sel",
@@ -274,7 +267,7 @@ async function playerSelectMenu() {
     onKeyPress("right", () => {
       if (j < 8) {
         ++j;
-        p1.moveTo(allCellCenter[j]), play("menuNav");
+        p1.moveTo(allCellCenter[j]), play("storyNav");
         destroyAll("pOneBig");
         playerOneBigFace(j);
       }
@@ -283,17 +276,45 @@ async function playerSelectMenu() {
     onKeyPress("left", () => {
       if (j > 0) {
         --j;
-        p1.moveTo(allCellCenter[j]), play("menuNav");
+        p1.moveTo(allCellCenter[j]), play("storyNav");
         destroyAll("pOneBig");
         playerOneBigFace(j);
       }
     });
     onKeyPress("enter", () => {
-      playerMenuSound.stop();
-      play("select");
-      addSel(j);
-      p1.destroy();
-      go("playerTwoSelectMenu", j);
+      if (mode !== "survive") {
+        playerMenuSound.stop();
+        play("storySelect1");
+        addSel(j);
+        p1.destroy();
+        go("playerTwoSelectMenu", j, mode);
+      } else {
+        if (mode == "survive") {
+          playerMenuSound.stop();
+          destroyAll("pOneBig");
+          destroyAll("purpleMenuBg");
+          destroyAll("allPlayerCell");
+          destroyAll("allGreenCell");
+          destroyAll("cellContainer");
+          destroyAll("p1Sel");
+          go("pvpScene", {
+            p1: j,
+            p2: 0,
+            nextScene: () => {
+              go("game", {
+                p1: j,
+                p2: 0, //checking if player one selected the first player.
+                r: 1,
+                p1r: 0,
+                p2r: 0,
+                mode: "survive",
+                wins: 0,
+                stageNum: randi(0, 2),
+              });
+            },
+          });
+        }
+      }
     });
     onKeyPress("d", () => {
       playerMenuSound.stop();
@@ -306,17 +327,19 @@ async function playerSelectMenu() {
       go("menu");
     });
     /*--------------------------------------------------------------------------------*/
-    scene("playerTwoSelectMenu", (j) => {
+    scene("playerTwoSelectMenu", (j, mode) => {
       playerMenuSound.play();
       let k = 0;
 
       const playerTwoBigFace = (k) => {
         const p2f = add([
           sprite(`${allPlayers[k]}BigFace`),
-          area(),
           pos(width(), height()),
           origin("botright"),
-          scale(Math.min(width() / 1280, height() / 720)),
+          stay(),
+          scale(0.8), //Math.min(width() / 1280, height() / 720)
+          layer("pvp"),
+          z(1),
           "pTwoBig",
         ]);
         p2f.flipX(true);
@@ -326,9 +349,8 @@ async function playerSelectMenu() {
           width: getAllCell[k].width * 0.6,
           height: getAllCell[k].height * 0.8,
         }),
-        area(),
         pos(allCellCenter[k]),
-        scale(1),
+        scale(1.2),
         origin("center"),
         z(3),
       ]);
@@ -338,7 +360,7 @@ async function playerSelectMenu() {
       onKeyPress("right", () => {
         if (k < 8) {
           ++k;
-          p2.moveTo(allCellCenter[k]), play("menuNav");
+          p2.moveTo(allCellCenter[k]), play("storyNav");
           destroyAll("pTwoBig");
           playerTwoBigFace(k);
         }
@@ -347,13 +369,13 @@ async function playerSelectMenu() {
       onKeyPress("left", () => {
         if (k > 0) {
           --k;
-          p2.moveTo(allCellCenter[k]), play("menuNav");
+          p2.moveTo(allCellCenter[k]), play("storyNav");
           destroyAll("pTwoBig");
           playerTwoBigFace(k);
         }
       });
       onKeyPress("enter", () => {
-        play("select");
+        play("storySelect1");
         playerMenuSound.stop();
         p2.destroy();
         destroyAll("pTwoBig");
@@ -363,7 +385,21 @@ async function playerSelectMenu() {
         destroyAll("allPlayerCell");
         destroyAll("cellContainer");
         destroyAll("p1Sel");
-        go("game", j, k);
+        go("pvpScene", {
+          p1: j,
+          p2: k,
+          nextScene: () => {
+            go("game", {
+              p1: j,
+              p2: k,
+              r: 1,
+              p1r: 0,
+              p2r: 0,
+              mode: mode,
+              stageNum: mode == "test" ? 2 : 1,
+            });
+          },
+        });
       });
 
       onKeyPress("d", () => {
@@ -374,7 +410,7 @@ async function playerSelectMenu() {
         destroyAll("allPlayerCell");
         destroyAll("cellContainer");
         destroyAll("p1Sel");
-        go("playerOneSelectMenu");
+        go("playerOneSelectMenu", { mode: mode });
       });
     });
   });

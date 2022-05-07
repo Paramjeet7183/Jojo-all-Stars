@@ -1,36 +1,39 @@
 const jojo = {
   name: "johnny",
+  displayName: "JOHNNY JOESTAR",
   speed: 256,
   jumpForce: 1,
+  scale: 3,
   loadAsset: async function () {
-    loadSpriteAtlas("../assets/jhonny/jhonny-Recovered.png", {
+    loadSpriteAtlas("../assets/jhonny/jhonny.png", {
       johnny: {
         x: 0,
         y: 0,
-        width: 873, //width of sprite sheet
-        height: 639, //height of sprite sheet
+        width: 792, //width of sprite sheet
+        height: 558, //height of sprite sheet
         sliceX: 9, // how many frames is in X axis of sprite sheet
         sliceY: 9, //how many frames is in Y axis of sprite sheet
         anims: {
           // defining animations : "from" = starting frame "to" = final frame of animations
-          idle: { from: 0, to: 2, speed: 8, loop: true },
-          crouch: { from: 3, to: 3, speed: 1 },
-          run: { from: 4, to: 6, speed: 8, loop: true },
-          punch: { from: 7, to: 10, speed: 12 },
-          punch2: { from: 11, to: 14, speed: 12 },
-          shootAct1_1: { from: 15, to: 20, speed: 12 },
-          shootAct1_2: { from: 21, to: 26, speed: 12 },
-          shootAct1_UP: { from: 27, to: 31, speed: 12 },
-          shootAct2_1: { from: 32, to: 43, speed: 12 },
-          fromPortal: { from: 44, to: 46, speed: 8 },
-          charge: { from: 49, to: 49, speed: 12 },
-          hurt: { from: 50, to: 52, speed: 8 },
-          fall: { from: 53, to: 56, speed: 8 },
-          pickSteelBall: { from: 57, to: 62, speed: 16 },
-          throwSteelBall: { from: 63, to: 67, speed: 16 },
-          punch3: { from: 68, to: 70, speed: 12 },
-          punch4: { from: 71, to: 75, speed: 16 },
-          shootAct2_DOWN: { from: 76, to: 77, speed: 8 },
+          idle: { from: 0, to: 3, speed: 8, loop: true },
+          crouch: { from: 4, to: 4, speed: 16 },
+          run: { from: 5, to: 8, speed: 8, loop: true },
+          punch: { from: 9, to: 12, speed: 12 },
+          punch2: { from: 13, to: 16, speed: 12 },
+          shootAct1_1: { from: 17, to: 22, speed: 12 },
+          introOpen: { from: 23, to: 28, speed: 16 },
+          introClose: { from: 28, to: 23, speed: 16 },
+          shootAct1_UP: { from: 29, to: 33, speed: 12 },
+          shootAct2_1: { from: 34, to: 45, speed: 12 },
+          fromPortal: { from: 46, to: 48, speed: 8 },
+          charge: { from: 51, to: 51, speed: 12 },
+          hurt: { from: 52, to: 54, speed: 8 },
+          fall: { from: 55, to: 58, speed: 8 },
+          pickSteelBall: { from: 59, to: 64, speed: 16 },
+          throwSteelBall: { from: 65, to: 69, speed: 16 },
+          punch3: { from: 70, to: 72, speed: 12 },
+          punch4: { from: 73, to: 77, speed: 16 },
+          shootAct2_DOWN: { from: 78, to: 79, speed: 8 },
         },
       },
     });
@@ -85,7 +88,7 @@ const jojo = {
         anims: { idle: { from: 0, to: 4, speed: 32 } },
       },
     });
-    // loadSound("theme","../assets/jhonny/theme.mp3")
+    // loadSound("theme", "../assets/jhonny/theme.mp3");
     loadSprite("bullet2", "../assets/jhonny/07.png");
     loadSprite("steelBall", "../assets/jhonny/steel.png");
     loadSprite("tusk3", "../assets/jhonny/tusk3.png");
@@ -111,6 +114,10 @@ const jojo = {
     loadSound("hurt2", "../assets/jhonny/hurt (2).wav");
     loadSound("hurt3", "../assets/jhonny/hurt (3).wav");
     loadSound("hurt4", "../assets/jhonny/hurt (4).wav");
+    loadSound("johnnyIntro1", "../assets/jhonny/intro (1).wav");
+    loadSound("johnnyIntro2", "../assets/jhonny/intro (2).wav");
+    loadSound("johnnyIntro3", "../assets/jhonny/intro (3).wav");
+    loadSound("johnnyIntro4", "../assets/jhonny/intro (4).wav");
   },
   attacks: {
     hExist: false,
@@ -118,6 +125,18 @@ const jojo = {
     keyCount: 0,
     fired: false,
     stand: 1,
+    intro: async function (player) {
+      player.play("introOpen");
+      play(
+        choose(["johnnyIntro1", "johnnyIntro2", "johnnyIntro3", "johnnyIntro4"])
+      );
+      wait(4, () => {
+        player.play("introClose");
+        player.onAnimEnd("introClose", () => {
+          player.play("idle");
+        });
+      });
+    },
     hitBox: function ({ w, h, position, delay, timeOut, org, tag }) {
       wait(delay, () => {
         const box = add([
@@ -247,7 +266,7 @@ const jojo = {
           ]);
           steelBall.onCollide("HurtBox", () => {
             steelBall.destroy();
-            play("stand2");
+            play("stand2", { volume: 1 }); //stand appearing sound.
             const a = add([
               sprite("act2", { anim: "idle" }),
               pos(steelBall.pos.sub(6 * vw, 0)),
@@ -264,7 +283,7 @@ const jojo = {
                   width: 22.5 * vw,
                   height: 40 * vh,
                 }),
-                pos(steelBall.pos),
+                pos(steelBall.pos.add(0, 6 * vh)),
                 origin(standOrigin),
                 layer("effect"),
                 lifespan(7),
@@ -515,14 +534,17 @@ const jojo = {
       }
     },
     charge: async function ({ player, chargeMeter }) {
-      player.play("charge");
-      chargeMeter.charge(0.5);
-      if (!this.fired) {
-        this.fired = true;
-        play(choose(["johnnyCharge1", "johnnyCharge2"]));
-        wait(1.5, () => {
-          this.fired = false;
-        });
+      if (chargeMeter.getWidth() < 12 * vw) {
+        player.play("charge");
+        chargeMeter.charge(0.5);
+        shake(4);
+        if (!this.fired) {
+          this.fired = true;
+          play(choose(["johnnyCharge1", "johnnyCharge2"]));
+          wait(2, () => {
+            this.fired = false;
+          });
+        }
       }
     },
     collisons: async function ({ enemy, enemyTag, enemyHealth }) {
@@ -532,7 +554,7 @@ const jojo = {
 
       onCollide(`${allBox}`, "tuskHitBox", () => {
         enemy.play("hurt");
-        enemyHealth.hurt(1);
+        enemyHealth.hurt(5);
         shake(4);
         play("punchSound1");
         play("hurt1");

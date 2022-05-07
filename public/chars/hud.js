@@ -1,11 +1,9 @@
-loadSprite("fight", "../assets/hud/fight.png");
-loadSprite("lose", "../assets/hud/lose.png");
-loadSprite("healthBar", "../assets/hud/health.png");
 loadSprite("timer", "../assets/hud/timer.png");
+loadSprite("healthBar", "../assets/hud/health.png");
 loadSprite("charge", "../assets/hud/charge.png");
 loadSprite("johnnyIcon", "../assets/hud/johnny.png");
 loadSprite("jotaroIcon", "../assets/hud/jotaro.png");
-
+loadSprite("gioronoIcon", "../assets/hud/giorono.png");
 class healthBar {
   constructor({
     playerName,
@@ -23,7 +21,7 @@ class healthBar {
     yPlayerImage,
   }) {
     this.timerFrame = add([
-      sprite("timer", { width: 4 * vw, height: 4 * vw }),
+      sprite("timer", { width: 6 * vw, height: 6 * vw }),
       pos(center().x, 8 * vh),
       origin("center"),
       layer("hud"),
@@ -58,7 +56,7 @@ class healthBar {
       z(0),
     ]);
     this.playerImage = add([
-      sprite(`${playerName}Icon`, { width: 7 * vw, height: 7 * vw }),
+      sprite(`${playerName}Icon`, { width: 12 * vw, height: 9 * vw }),
       pos(this.healthFrame.pos.sub(xPlayerImage, yPlayerImage)),
       origin(`bot${originFrame}`),
       layer("hud"),
@@ -67,7 +65,8 @@ class healthBar {
     ]);
     this.playerNameFrame = add([
       text(`${displayName}`, {
-        size: 1 * vw,
+        size: 2 * vw,
+        font: "apl386",
       }),
       pos(this.healthFrame.pos.sub(0, 4 * vh)),
       origin(`bot${originFrame}`),
@@ -108,17 +107,13 @@ class healthBar {
       this.bigHealthBar.width += healPoint * this.healthUnit;
     }
   }
+  getWidth() {
+    return this.smallHealthBar.width + this.bigHealthBar.width;
+  }
 }
 
 class chargeBar {
-  constructor({
-    xChargeFrame,
-    yChargeFrame,
-    originFrame,
-    xCharge,
-    yCharge,
-    originCharge,
-  }) {
+  constructor({ xChargeFrame, originFrame, xCharge, originCharge }) {
     this.chargeFrame = add([
       sprite("charge", { width: 16 * vw, height: 6 * vh }),
       pos(xChargeFrame, 100 * vh),

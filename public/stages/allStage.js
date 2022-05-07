@@ -1,69 +1,97 @@
-const allStage = {
-  //-----------------------------------------------------------
-  stageOne: async function () {
-    const stageOneBg1 = add([
-      sprite("stageOneBg1"),
-      pos(center()),
-      origin("bot"),
-      scale(Math.max(width() / 2398, height() / 1200)),
-      z(0),
-    ]);
-    const stageOneBg2 = add([
-      sprite("stageOneBg2"),
-      pos(0, height()),
-      origin("botleft"),
-      scale(Math.max(width() / 1280, height() / 720)),
-      z(1),
-    ]);
-  },
-  //----------------------------------------------------------------------
-  stageTwo: async function () {
-    const stageTwoBg1 = add([
-      sprite("stageTwoBg1"),
-      pos(center()),
-      origin("bot"),
-      scale(Math.max(width() / 2000, height() / 375)),
-      z(0),
-    ]);
-    const stageTwoBg2 = add([
-      sprite("stageTwoBg2"),
-      pos(0, height()),
-      origin("bot"),
-      scale(Math.max(width() / 955, height() / 88)),
-      z(1),
-    ]);
-    const stageTwoBg3 = add([
-      sprite("stageTwoBg3"),
-      pos(0, height()),
-      origin("bot"),
-      scale(Math.max(width() / 1389, height() / 122)),
-      z(2),
-    ]);
-    const stageTwoBg4 = add([
-      sprite("stageTwoBg4"),
-      pos(center().x, height()),
-      origin("bot"),
-      scale(Math.max(width() / 1475, height() / 422)),
-      z(3),
-    ]);
-  },
-  //------------------------------------------------------------
-  stageThree: async function () {
-    const stageThreeBg1 = add([
-      sprite("stageThreeBg1"),
-      pos(center()),
-      origin("bot"),
-      scale(Math.max(width() / 1604, height() / 217)),
-      z(0),
-    ]);
-    const stageThreeBg2 = add([
-      sprite("stageThreeBg2"),
-      pos(0, height()),
-      origin("botleft"),
-      fixed(),
-      scale(Math.max(width() / 1040, height() / 585)),
-      z(1),
-    ]);
-  },
-};
-export default allStage;
+async function desert() {
+  const ob1 = add([
+    sprite("desertSky"),
+    pos(50 * vw, 25 * vh),
+    origin("center"),
+    scale(Math.min(width() / 960, height() / 320)),
+    z(0),
+  ]);
+  const ob2 = add([
+    sprite("desertSandBg"),
+    pos(50 * vw, 75 * vh),
+    origin("center"),
+    scale(Math.min(width() / 384, height() / 75)),
+    z(1),
+  ]);
+  const ob3 = add([
+    sprite("desertSand"),
+    pos(-20 * vw, 100 * vh),
+    origin("botleft"),
+    scale(Math.max(width() / 639, height() / 197)),
+    z(2),
+  ]);
+  const ob4 = add([
+    sprite("desertWheel", { anim: "idle" }),
+    pos(100 * vw, 41 * vh),
+    origin("botright"),
+    scale(3),
+    z(3),
+  ]);
+}
+
+async function train() {
+  const ob1 = add([
+    sprite("trainBg"),
+    pos(center()),
+    origin("center"),
+    scale(1),
+    z(0),
+  ]);
+  const ob2 = add([
+    sprite("trainGround"),
+    pos(0, 100 * vh),
+    origin("botleft"),
+    scale(0.5),
+    z(1),
+  ]);
+}
+async function beach() {
+  const ob1 = add([
+    sprite("beachSky"),
+    pos(0, 50 * vh),
+    origin("botleft"),
+    scale(1.8),
+    z(0),
+  ]);
+  const ob2 = add([
+    sprite("beachBush"),
+    pos(0, 100 * vh),
+    origin("botleft"),
+    scale(Math.max(width() / 514, height() / 144)),
+    z(2),
+  ]);
+  const ob3 = add([
+    sprite("beachWater", { anim: "idle" }),
+    pos(0, 39 * vh),
+    origin("topleft"),
+    scale(4.590277777777778),
+    z(3),
+  ]);
+}
+
+async function school() {
+  const ob1 = add([
+    sprite("school"),
+    pos(0, 100 * vh),
+    origin("botleft"),
+    scale(Math.max(width() / 768, height() / 262)),
+    z(0),
+  ]);
+  const ob2 = add([
+    sprite("injured", { anim: "idle" }),
+    pos(10 * vw, 67 * vh),
+    origin("botleft"),
+    scale(2.4),
+    z(1),
+  ]);
+}
+async function jail() {
+  const ob1 = add([
+    sprite("jail"),
+    pos(-30 * vw, 100 * vh),
+    origin("botleft"),
+    scale(Math.max(width() / 848, height() / 256)),
+    z(0),
+  ]);
+}
+export { desert, train, beach, school, jail };
