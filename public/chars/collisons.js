@@ -5,6 +5,7 @@ import {
   addEff3,
   addEff4,
   addEff5,
+  addFire,
   addSpin,
 } from "./effects.js";
 async function collisions({
@@ -26,7 +27,16 @@ async function collisions({
       p.move(p.flipX() ? disX : -disX, -disY);
     });
   }
-  const ef = [addEff1, addEff2, addEff3, addEff4, addEff5, addBlood, addSpin];
+  const ef = [
+    addEff1,
+    addEff2,
+    addEff3,
+    addEff4,
+    addEff5,
+    addBlood,
+    addSpin,
+    addFire,
+  ];
   const collisionEffect = ({
     collideSound,
     pauseTimeOut,

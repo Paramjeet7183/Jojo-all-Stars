@@ -69,22 +69,14 @@ async function addSpin(position) {
   ]);
 }
 async function addFire(position) {
-  if (!fire.exists()) {
-    const fire = add([
-      sprite("fireEffect", { anim: "idle" }),
-      pos(position),
-      origin("center"),
-      scale(2.5),
-      layer("effects"),
-    ]);
-  }
-  fire.onAnimEnd("idle", () => {
-    fire.play("close", {
-      onEnd: () => {
-        fire.destroy();
-      },
-    });
-  });
+  const fire = add([
+    sprite("fireEffect", { anim: "idle" }),
+    pos(position),
+    origin("bot"),
+    scale(2.5),
+    lifespan(0.7),
+    layer("effect"),
+  ]);
 }
 export {
   addEff1,

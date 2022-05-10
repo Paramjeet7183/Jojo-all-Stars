@@ -116,7 +116,22 @@ async function Game() {
       key5: "c",
     });
     // player control End
-
+    // ai({
+    //   player: enemy,
+    //   stand: enemyStand,
+    //   enemy: player,
+    //   data: allPlayer[p2],
+    //   health: enemyHealth,
+    //   charge: enemyCharge,
+    // });
+    // ai({
+    //   player: player,
+    //   stand: playerStand,
+    //   enemy: enemy,
+    //   data: allPlayer[p1],
+    //   health: playerHealth,
+    //   charge: playerCharge,
+    // });
     //enemy controls
     control({
       player: enemy,
@@ -250,9 +265,13 @@ async function Game() {
     //adding fight effect and starting the match
     // play("johnnyTheme", { volume: bgm });
     wait(1, () => {
-      play(`r${r}f`);
+      play(`r${r}f`, {
+        volume: bgm,
+      });
       wait(1.2, () => {
-        play("fightSound");
+        play("fightSound", {
+          volume: bgm,
+        });
         let f = add([
           sprite("fightLogo"),
           pos(center()),
@@ -466,7 +485,12 @@ async function Game() {
     async function ending({ winner }) {
       matchEnded = true;
       let played = false;
-      played ? () => {} : (play("retTbc"), (played = true));
+      played
+        ? () => {}
+        : (play("retTbc", {
+            volume: bgm,
+          }),
+          (played = true));
       const l = add([
         sprite("loseLogo"),
         pos(center()),
@@ -538,6 +562,8 @@ async function Game() {
     //making sure player always face each other
     let fired = false;
     player.onUpdate(() => {
+      // camPos(camPos().lerp(vec2(player.pos.x, 50 * vh), dt() * 3));
+      // camScale(camScale().lerp(vec2(5), dt() * 3));
       if (player.pos.x - enemy.pos.x > 6 * vw) {
         if (enemy.curAnim() !== "jump") {
           enemy.flipX(false);
@@ -558,21 +584,21 @@ async function Game() {
       // checking winner after the time is up
       //checking if game mode is training it it is keep running dont go to endRound function
       if (time == 0) {
-        if (playerHealth.getWidth() > enemyHealth.getWidth()) {
+        if (playerHealth.get() > enemyHealth.get()) {
           mode == "test"
             ? () => {}
             : fired
             ? () => {}
             : ((fired = true), ending({ winner: "p1" }));
         }
-        if (playerHealth.getWidth() < enemyHealth.getWidth()) {
+        if (playerHealth.get() < enemyHealth.get()) {
           mode == "test"
             ? () => {}
             : fired
             ? () => {}
             : ((fired = true), ending({ winner: "p2" }));
         }
-        if (playerHealth.getWidth() == enemyHealth.getWidth()) {
+        if (playerHealth.get() == enemyHealth.get()) {
           mode == "test"
             ? () => {}
             : go("game", {
@@ -590,14 +616,14 @@ async function Game() {
       }
       //checking winner before time is up
       if (time > 0) {
-        if (playerHealth.getWidth() < 0) {
+        if (playerHealth.get() < 0) {
           mode == "test"
             ? () => {}
             : fired
             ? () => {}
             : ((fired = true), ending({ winner: "p2" }));
         }
-        if (enemyHealth.getWidth() < 0) {
+        if (enemyHealth.get() < 0) {
           mode == "test"
             ? () => {}
             : fired

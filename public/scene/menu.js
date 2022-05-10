@@ -63,6 +63,7 @@ const menu = {
       // jotaroSound.play();
       // introSound.play();
       console.log("intro scene is running");
+
       //intro cover with game title
       const cover = add([
         sprite("cover"),
@@ -122,11 +123,11 @@ const menu = {
       greenBg.onUpdate(() => {
         if (!a) {
           //background image move 64px Left.
-          greenBg.move(-64, 0);
+          greenBg.move(vec2(-64, -16).lerp(vec2(-128, -16), dt() * 3));
         }
         if (a) {
           //background image move 64px Right.
-          greenBg.move(64, 0);
+          greenBg.move(vec2(64, 16).lerp(vec2(128, 16), dt() * 3));
         }
       });
 

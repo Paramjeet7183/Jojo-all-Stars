@@ -1,3 +1,13 @@
+loadShader(
+  "invert",
+  null,
+  `
+vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
+	vec4 c = def_frag();
+	return mix(c, vec4(0,0,0,c.a), 1.0);
+}
+`
+);
 class Player {
   constructor({ dataObj, spawnPos, tag }) {
     //fighter
@@ -13,14 +23,15 @@ class Player {
       body({
         weight: 2.2,
       }),
-      pos(spawnPos, 90 * vh),
+      pos(spawnPos, 98 * vh),
       layer("players"),
       scale(3),
       origin("bot"),
       z(1),
-      state("idle", ["idle", "run", "attack"]),
+      state("idle", ["idle", "runForward", "runBackward", "attack"]),
       `${tag}`,
     ]);
+
     //fighters stand
     this.stand = add([
       sprite(dataObj.standName, {
@@ -35,7 +46,20 @@ class Player {
       "stand",
       `${dataObj.standName}`,
     ]);
+    this.pShadow = add([
+      sprite(dataObj.name),
+      pos(this.player.x, height() - 5 * vh + dataObj.areaOffset.y - 16),
+      scale(2.8, 3),
+      origin("top"),
+      opacity(0.4),
+      shader("invert"),
+      layer("players"),
+      z(0),
+    ]);
+    this.pShadow.flipY(true);
+    //--
     this.stand.onUpdate(() => {
+      //--
       if (this.player.flipX()) {
         this.stand.flipX(true);
         this.stand.follow.offset = vec2(
@@ -55,14 +79,14 @@ class Player {
     destroy(this.stand);
 
     //temporary :- for reference point
-    const c = add([
-      rect(2, 32),
-      pos(this.player.pos),
-      follow(this.player),
-      origin("center"),
-      color(GREEN),
-      layer("effect"),
-    ]);
+    // const c = add([
+    //   rect(2, 32),
+    //   pos(this.player.pos),
+    //   follow(this.player),
+    //   origin("center"),
+    //   color(GREEN),
+    //   layer("effect"),
+    // ]);
     //woosh sound
 
     //playing idle animation after end of these animations.
@@ -127,6 +151,9 @@ class Player {
     }
     this.player.onUpdate(() => {
       //hit Box
+      this.pShadow.frame = this.player.frame;
+      this.pShadow.flipX(this.player.flipX());
+      this.pShadow.pos.x = this.player.pos.x;
       for (let i = 0; i <= dataObj.hitBoxData.length - 1; i++) {
         if (this.player.frame == dataObj.hitBoxData[i].frame) {
           if (!this.player.flipX()) {
@@ -192,7 +219,7 @@ class Player {
           //playing woosh sounds
           if (this.stand.frame == dataObj.standHitBoxData[i].soundFrame) {
             play(dataObj.standHitBoxData[i].sound, {
-              volume: bgm,
+              volume: airSound,
             });
           }
         }

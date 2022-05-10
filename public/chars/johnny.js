@@ -39,6 +39,27 @@ const hitBoxData = [
     size: { w: 64, h: 128 },
     tag: "johnnyHeavyPunch",
   },
+  {
+    //chop2
+    frame: 112,
+    position: vec2(128, -208),
+    size: { w: 32, h: 32 },
+    tag: "johnnyChop2",
+  },
+  {
+    //crouch punch1
+    frame: 93,
+    position: vec2(180, -112),
+    size: { w: 32, h: 32 },
+    tag: "johnnyChop2",
+  },
+  {
+    //crouch punch2
+    frame: 101,
+    position: vec2(185, -100),
+    size: { w: 32, h: 32 },
+    tag: "johnnyChop2",
+  },
 ];
 const collisionData = [
   {
@@ -55,6 +76,30 @@ const collisionData = [
   },
   {
     entities: ["johnnyPunch", "H2"],
+    collideSound: "punchSound3",
+    collisionTimeOut: 0.2,
+    pauseTimeOut: 0.4,
+    soundTimeOut: 0.5,
+    attackDamage: 1.5,
+    pushX: 16,
+    pushY: 0,
+    effect: [1],
+    shake: 2,
+  },
+  {
+    entities: ["johnnyChop2", "H1"],
+    collideSound: "punchSound3",
+    collisionTimeOut: 0.2,
+    pauseTimeOut: 0.4,
+    soundTimeOut: 0.5,
+    attackDamage: 1.5,
+    pushX: 16,
+    pushY: 0,
+    effect: [1],
+    shake: 2,
+  },
+  {
+    entities: ["johnnyChop2", "H2"],
     collideSound: "punchSound3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.4,
@@ -110,6 +155,30 @@ const collisionData = [
     attackDamage: 3.5,
     pushX: 100,
     pushY: 0,
+    effect: [7, 1],
+    shake: 14,
+  },
+  {
+    entities: ["portal", "H2"],
+    collideSound: "punchSound3",
+    collisionTimeOut: 0.2,
+    pauseTimeOut: 0.4,
+    soundTimeOut: 0.5,
+    attackDamage: 3.5,
+    pushX: 100,
+    pushY: 600,
+    effect: [7, 1],
+    shake: 8,
+  },
+  {
+    entities: ["johnnyRay", "H2"],
+    collideSound: "punchSound3",
+    collisionTimeOut: 0.2,
+    pauseTimeOut: 0.4,
+    soundTimeOut: 0.5,
+    attackDamage: 3.5,
+    pushX: 100,
+    pushY: 600,
     effect: [7, 1],
     shake: 8,
   },
@@ -177,15 +246,16 @@ const hurtBoxData = [
   },
 ];
 //tusk bullet
-async function fireBullet(player) {
+async function fireBullet({ player, dir, p, offset, angle }) {
   const bullet = add([
     sprite("bullet"),
     area(),
-    pos(player.pos.add(player.flipX() ? -128 : 128, -222)),
-    move(player.flipX() ? LEFT : RIGHT, 2000),
+    pos(player.pos.add(player.flipX() ? -p.x : p.x, p.y)),
+    move(vec2(player.flipX() ? -dir.x : dir.x, dir.y), 2000),
     cleanup(),
     origin("center"),
     layer("effect"),
+    rotate(player.flipX() ? angle : -angle),
     scale(0.5),
     opacity(1),
     "johnnyBullet1",
@@ -195,10 +265,11 @@ async function fireBullet(player) {
   });
   const trail = add([
     sprite("bulletTrail1", { anim: "idle" }),
-    pos(bullet.pos.sub(-16, 0)),
+    pos(bullet.pos.sub(player.flipX() ? offset.x : -offset.x, -offset.y / 1.3)),
     origin("center"),
     layer("effect"),
-    move(player.flipX() ? RIGHT : LEFT, 256),
+    move(vec2(player.flipX() ? dir.x : -dir.x, -dir.y), 256),
+    rotate(player.flipX() ? angle : -angle),
     scale(1.4),
     lifespan(0.3),
   ]);
@@ -208,9 +279,18 @@ async function fireBullet(player) {
       if (!tExist) {
         const trail1 = add([
           sprite("bulletTrail1", { anim: "idle" }),
-          pos(bullet.pos.sub(player.flipX() ? -64 : 64, 0)),
+          pos(
+            bullet.pos.sub(
+              player.flipX() ? -offset.x : offset.x,
+              offset.y / 1.3
+            )
+          ),
           origin("center"),
-          move(player.flipX() ? RIGHT : LEFT, 900),
+          move(
+            vec2(player.flipX() ? dir.x : -dir.x, -dir.y),
+            vec2(900, 0).lerp(vec2(200, 300), dt() * 16).x
+          ),
+          rotate(player.flipX() ? angle : -angle),
           layer("effect"),
           scale(0.55),
           lifespan(0.2),
@@ -231,35 +311,47 @@ const chop = {
     play("punchWooshSound1", {
       volume: airSound,
     });
+    play("johnnyAtt1", {
+      volume: charSound,
+    });
   },
 };
 const chop2 = {
   ex: true,
   anim: "chop2",
-  timeOut: 0.5,
+  timeOut: 0.64,
   fun: () => {
     play("punchWooshSound1", {
       volume: airSound,
+    });
+    play("johnnyAtt2", {
+      volume: charSound,
     });
   },
 };
 const punchUp = {
   ex: true,
   anim: "punchUp",
-  timeOut: 0.5,
+  timeOut: 0.55,
   fun: () => {
     play("punchWooshSound3", {
       volume: airSound,
+    });
+    play("johnnyAtt3", {
+      volume: charSound,
     });
   },
 };
 const heavyPunch = {
   ex: true,
   anim: "heavyPunch",
-  timeOut: 0.5,
+  timeOut: 0.76,
   fun: () => {
     play("punchWooshSound2", {
       volume: airSound,
+    });
+    play("johnnyAtt2", {
+      volume: charSound,
     });
   },
 };
@@ -269,16 +361,25 @@ const shoot = {
   timeOut: 0.85,
   fun: ({ player, stand }) => {
     play("bulletActivate", {
-      volume: 0.3,
+      volume: charSound * 1.5,
     });
-    play("attack", {
-      volume: 0.5,
+    play("tuskAttack", {
+      volume: charSound,
+    });
+    play("chummi", {
+      volume: charSound / 2,
     });
     wait(0.38, () => {
       play("bulletSound", {
-        volume: 0.5,
+        volume: charSound * 1.5,
       });
-      fireBullet(player);
+      fireBullet({
+        player: player,
+        angle: 0,
+        dir: vec2(1, 0),
+        offset: vec2(64, 0),
+        p: vec2(64, -222),
+      });
     });
   },
 };
@@ -286,7 +387,36 @@ const shootUp = {
   ex: true,
   anim: "shootUp",
   timeOut: 0.5,
-  fun: () => {},
+  fun: ({ player, stand }) => {
+    // fireBullet({
+    //   player: player,
+    //   angle: 45,
+    //   dir: vec2(1, -0.75),
+    //   offset: vec2(64, -64),
+    //   p: vec2(32, -256),
+    // });
+    play("bulletActivate", {
+      volume: charSound * 1.5,
+    });
+    play("tuskAttack", {
+      volume: charSound,
+    });
+    play("chummi", {
+      volume: charSound / 2,
+    });
+    wait(0.3, () => {
+      play("bulletSound", {
+        volume: charSound * 1.5,
+      });
+      fireBullet({
+        player: player,
+        angle: 45,
+        dir: vec2(1, -0.75),
+        offset: vec2(64, -64),
+        p: vec2(58, -280),
+      });
+    });
+  },
 };
 
 //shootDown
@@ -322,11 +452,15 @@ const ray = {
   timeOut: 1,
   fun: ({ player, stand }) => {
     play("bulletActivate", {
-      volume: 0.3,
+      volume: charSound * 1.5,
     });
+    // play("johnnyAtt1", {
+    //   volume: charSound,
+    // });
     wait(0.24, () => {
       add([
         sprite("ray", { anim: "idle" }),
+        area(),
         pos(player.pos.add(player.flipX() ? -116 : 116, -50)),
         origin(player.flipX() ? "botright" : "botleft"),
         lifespan(0.7),
@@ -341,13 +475,27 @@ const crouchPunch = {
   ex: true,
   anim: "crouchPunch",
   timeOut: 0.5,
-  fun: () => {},
+  fun: () => {
+    play("punchWooshSound2", {
+      volume: airSound,
+    });
+    play("johnnyAtt3", {
+      volume: charSound,
+    });
+  },
 };
 const crouchPunch2 = {
   ex: true,
   timeOut: 0.5,
   anim: "crouchPunch2",
-  fun: () => {},
+  fun: () => {
+    play("punchWooshSound1", {
+      volume: airSound,
+    });
+    play("johnnyAtt2", {
+      volume: charSound,
+    });
+  },
 };
 const empty = {
   ex: false,

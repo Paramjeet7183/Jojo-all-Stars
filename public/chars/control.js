@@ -96,7 +96,12 @@ function control({
       !isKeyPressed(left) &&
       !isKeyDown(down)
     ) {
-      player.move(player.flipX() ? SPEED / 1.5 : SPEED, 0);
+      player.move(
+        player.flipX()
+          ? vec2(SPEED / 1.3, 0).lerp(player.pos, dt() * 8).x
+          : vec2(SPEED, 0).lerp(player.pos, dt() * 8).x,
+        0
+      );
       if (
         player.isGrounded() &&
         player.curAnim() !== "walkForward" &&
@@ -152,7 +157,7 @@ function control({
     ) {
       player.play("jump");
       stand.play("jump");
-      player.jump(JUMP_FORCE);
+      player.jump(vec2(0, JUMP_FORCE).lerp(player.pos, dt() * 6).y);
     }
   });
   onKeyDown(down, () => {

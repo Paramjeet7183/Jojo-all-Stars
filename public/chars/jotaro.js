@@ -351,6 +351,9 @@ const punch = {
     play("punchWooshSound3", {
       volume: airSound,
     });
+    play("muh", {
+      volume: charSound,
+    });
   },
 };
 const kick = {
@@ -361,6 +364,9 @@ const kick = {
     play("punchWooshSound2", {
       volume: airSound,
     });
+    play("muh", {
+      volume: charSound,
+    });
   },
 };
 const standPunch = {
@@ -369,6 +375,9 @@ const standPunch = {
   timeOut: 0.8,
   fun: ({ player, stand }) => {
     stand.play("punch");
+    play("muh", {
+      volume: charSound,
+    });
   },
 };
 const standKick = {
@@ -377,6 +386,9 @@ const standKick = {
   timeOut: 0.55,
   fun: ({ player, stand }) => {
     stand.play("kick");
+    play("orayo", {
+      volume: charSound,
+    });
   },
 };
 const standHeavyPunch = {
@@ -385,6 +397,9 @@ const standHeavyPunch = {
   timeOut: 0.55,
   fun: ({ player, stand }) => {
     stand.play("heavyPunch");
+    play("ora", {
+      volume: charSound * 1.5,
+    });
   },
 };
 const standSpecial = {
@@ -401,6 +416,10 @@ const standBarrage = {
   timeOut: 1.1,
   fun: ({ player, stand }) => {
     stand.play("barrage");
+    play("long ooh", {
+      volume: charSound,
+      seek: 0.5,
+    });
   },
 };
 const empty = {

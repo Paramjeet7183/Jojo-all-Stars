@@ -112,10 +112,9 @@ async function loadAssets() {
       y: 0,
       width: 924,
       height: 64,
-      sliceX: 13,
+      sliceX: 14,
       anims: {
-        idle: { from: 0, to: 7, loop: true, speed: 24 },
-        close: { from: 8, to: 12, loop: true, speed: 24 },
+        idle: { from: 0, to: 13, speed: 24 },
       },
     },
   });
@@ -150,6 +149,10 @@ async function loadAssets() {
   loadSound("jotaroHurt3", "../assets/jotaro/hurt (3).wav");
   loadSound("jotaroStand", "../assets/jotaro/starplatinum.wav");
   loadSound("jotaroStandAppear", "../assets/jotaro/deploy.wav");
+  loadSound("long ooh", "../assets/jotaro/long ooh.wav");
+  loadSound("orayo", "../assets/jotaro/orayo.wav");
+  loadSound("ora", "../assets/jotaro/ora (4).wav");
+  loadSound("muh", "../assets/jotaro/muh.wav");
   loadSpriteAtlas("../assets/jotaro/starPlatinum.png", {
     starPlatinum: {
       x: 0,
@@ -191,7 +194,7 @@ async function loadAssets() {
         pose3: { from: 94, to: 105, speed: 24 },
         pose4: { from: 106, to: 114, speed: 24 },
         win: { from: 38, to: 43, speed: 24 },
-        jump: { from: 83, to: 93, speed: 20 },
+        jump: { from: 83, to: 93, speed: 24 },
         crouch: { from: 32, to: 34, speed: 24 },
         upperHurt: { from: 115, to: 115, speed: 8 },
         fall: { from: 116, to: 116, speed: 8 },
@@ -204,7 +207,10 @@ async function loadAssets() {
 
   //johnny----
   loadSound("bulletActivate", "../assets/jhonny/bulletActivate.wav");
-  loadSound("attack", "../assets/jhonny/tusk.wav");
+  loadSound("tuskAttack", "../assets/jhonny/tusk.wav");
+  loadSound("johnnyAtt1", "../assets/jhonny/attack (1).wav");
+  loadSound("johnnyAtt2", "../assets/jhonny/attack (3).wav");
+  loadSound("johnnyAtt3", "../assets/jhonny/attack (5).wav");
   loadSound("johnnyStand", "../assets/jhonny/tusk act3.wav");
   loadSound("johnnyStandAppear", "../assets/jhonny/stand appearing.wav");
   loadSound("bulletSound", "../assets/jhonny/bulletSound.wav");
@@ -212,6 +218,7 @@ async function loadAssets() {
   loadSound("johnnyHurt1", "../assets/jhonny/hurt (1).wav");
   loadSound("johnnyHurt2", "../assets/jhonny/hurt (2).wav");
   loadSound("johnnyHurt3", "../assets/jhonny/hurt (3).wav");
+  loadSound("chummi", "../assets/jhonny/chummi (1).wav");
   // loadSound("johnnyTheme", "../assets/jhonny/theme.mp3");
   loadSprite("tusk", "../assets/jhonny/tusk3.png");
   loadSprite("bullet", "../assets/jhonny/07.png");
@@ -304,8 +311,8 @@ async function loadAssets() {
         upperHurt: { from: 87, to: 87, speed: 8 },
         charge: { from: 88, to: 88, speed: 16 },
         win: { from: 88, to: 88, speed: 16 },
-        crouchPunch: { from: 91, to: 96, speed: 16 },
-        crouchPunch2: { from: 97, to: 107, speed: 16 },
+        crouchPunch: { from: 91, to: 96, speed: 16 }, //3
+        crouchPunch2: { from: 97, to: 107, speed: 16 }, //6
         crouchHurt: { from: 83, to: 86, speed: 24 },
         fall: { from: 83, to: 86, speed: 24 },
       },
@@ -405,7 +412,7 @@ async function loadAssets() {
       },
     },
   });
-  //stage beach--
+  // //stage beach--
   loadSprite("jail", "../assets/stage_jail/jail.png");
   loadSprite("school", "../assets/stage_school/school.png");
   loadSprite("injured", "../assets/stage_school/injured.png", {
@@ -419,9 +426,5 @@ async function loadAssets() {
       idle: { from: 0, to: 4, speed: 8, loop: true },
     },
   });
-  window.charSound = 0.24;
-  window.bgm = 0.6;
-  window.punchSound = 0.45;
-  window.airSound = 0.2;
 }
 export { loadAssets };

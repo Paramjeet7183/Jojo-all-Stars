@@ -107,7 +107,7 @@ class healthBar {
       this.bigHealthBar.width += healPoint * this.healthUnit;
     }
   }
-  getWidth() {
+  get() {
     return this.smallHealthBar.width + this.bigHealthBar.width;
   }
 }
@@ -152,7 +152,7 @@ class chargeBar {
       this.chargeBigBar.width += chargePoint * this.chargeUnit;
     }
   }
-  getWidth() {
+  get() {
     return this.chargeBigBar.width;
   }
 }

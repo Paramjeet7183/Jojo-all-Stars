@@ -30,10 +30,10 @@ async function playerSelectMenu() {
     let a = true;
     purpleBg.onUpdate(() => {
       if (!a) {
-        purpleBg.move(0, -64);
+        purpleBg.move(vec2(0, -128).lerp(vec2(0, -64), dt() * 3));
       }
       if (a) {
-        purpleBg.move(0, 64);
+        purpleBg.move(vec2(0, 128).lerp(vec2(0, 64), dt() * 3));
       }
     });
     loop(20, () => {

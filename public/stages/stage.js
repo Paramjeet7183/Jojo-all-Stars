@@ -1,7 +1,7 @@
 import { beach, desert, jail, school, train } from "./allStage.js";
 async function stage(stageNum) {
   const platform = add([
-    rect(100 * vw, 10 * vh),
+    rect(100 * vw, 5 * vh),
     area(),
     solid(),
     pos(0, height()),
