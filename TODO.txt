@@ -1,21 +1,20 @@
 JOTARO : {
-	set attack damages.
-	make za wardo move with W KEY
-	make charge function
-	add effects
+	set attack damages.-- done
+	make charge function -- done
+	add effects -- done
+}
+johnny:{
+	make Tusk bulllet attack -- done
+	make charge
+	add sound -- done
 }
 
 MENU : {
-	add intro -- done -- bave to add msuic
-	add player select menu -- done -- have to add music
+	add intro -- done
+	add player select menu -- done
 }
 
 MISC : {
-	add common effects
-	add common sounds
+	add visual battle effects -- done
+	add sound -- done
 }
-
-
-"also have to optimise the game"
-
-"have to do many things but i dont remeber LOL"
