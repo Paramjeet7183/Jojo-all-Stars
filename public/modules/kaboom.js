@@ -5,7 +5,7 @@ const k = kaboom({
   height: window.innerHeight,
   touchToMouse: true,
   crisp: false,
-  texFilter: "linear",
+  //texFilter: "linear",
   font: "apl386o",
   background: [0, 0, 0],
 });

@@ -349,12 +349,28 @@ async function loadAssets() {
       },
     },
   });
+  loadSound("avdulAtt1", "../assets/avdul/attack (1).wav");
+  loadSound("avdulAtt2", "../assets/avdul/attack (2).wav");
+  loadSound("avdulAtt3", "../assets/avdul/attack (3).wav");
   loadSprite("avdulIcon", "../assets/hud/avdul.png");
   loadSound("avdulHurt1", "../assets/avdul/hurt (1).wav");
   loadSound("avdulHurt2", "../assets/avdul/hurt (2).wav");
   loadSound("avdulHurt3", "../assets/avdul/hurt (3).wav");
   loadSound("avdulStandAppear", "../assets/avdul/standAppear.wav");
   loadSound("avdulStand", "../assets/avdul/standName.wav");
+  loadSpriteAtlas("../assets/avdul/fireball.png", {
+    avdulFireBall: {
+      x: 0,
+      y: 0,
+      width: 594,
+      height: 335,
+      sliceX: 6,
+      sliceY: 5,
+      anims: {
+        idle: { from: 0, to: 25, speed: 24 },
+      },
+    },
+  });
   loadSpriteAtlas("../assets/avdul/magicianRed.png", {
     magicianRed: {
       x: 0,
@@ -412,6 +428,73 @@ async function loadAssets() {
       },
     },
   });
+  // giorono
+  loadSound("gioronoStandAppear", "../assets/giorono/standAppear.wav");
+  loadSound("gioronoStand", "../assets/giorono/standCall.wav");
+  loadSound("gioronoHurt1", "../assets/giorono/hurt (1).wav");
+  loadSound("gioronoHurt2", "../assets/giorono/hurt (2).wav");
+  loadSound("gioronoHurt3", "../assets/giorono/hurt (3).wav");
+  loadSound("gioronoHurt4", "../assets/giorono/hurt (4).wav");
+  loadSound("gioronoAtt1", "../assets/giorono/att (1).wav");
+  loadSound("gioronoAtt2", "../assets/giorono/att (2).wav");
+  loadSound("gioronoAtt3", "../assets/giorono/att (3).wav");
+  loadSound("gioronoAtt4", "../assets/giorono/att (4).wav");
+  loadSound("gioronoMuda1", "../assets/giorono/muda (1).wav");
+  loadSound("gioronoMuda2", "../assets/giorono/muda (2).wav");
+  loadSound("gioronoMuda3", "../assets/giorono/muda (3).wav");
+  loadSound("gioronoMuda4", "../assets/giorono/muda (4).wav");
+  loadSound("goldExpPunchEff1", "../assets/giorono/standPunchSound (1).wav");
+  loadSound("goldExpPunchEff2", "../assets/giorono/standPunchSound (2).wav");
+  loadSound("goldExpPunchEff3", "../assets/giorono/standPunchSound (3).wav");
+  loadSpriteAtlas("../assets/giorono/giorono.png", {
+    giorono: {
+      x: 0,
+      y: 0,
+      width: 1280,
+      height: 1160,
+      sliceX: 8,
+      sliceY: 8,
+      anims: {
+        idle: { from: 0, to: 3, speed: 24, loop: true },
+        crouch: { from: 4, to: 6, speed: 24 },
+        walkForward: { from: 7, to: 14, speed: 15, loop: true },
+        walkBackward: { from: 14, to: 7, speed: 14, loop: true },
+        jump: { from: 45, to: 47, speed: 24 },
+        punch: { from: 15, to: 19, speed: 24 },
+        kick: { from: 20, to: 24, speed: 24 },
+        kick2: { from: 25, to: 27, speed: 24 },
+        pose1: { from: 28, to: 33, speed: 24 },
+        win: { from: 34, to: 36, speed: 24 },
+        crouchPunch: { from: 37, to: 39, speed: 24 },
+        crouchKick: { from: 40, to: 44, speed: 24 },
+        upperHurt: { from: 48, to: 50, speed: 24 },
+        lowerHurt: { from: 51, to: 53, speed: 24 },
+        fall: { from: 54, to: 56, speed: 24 },
+      },
+    },
+  });
+  loadSpriteAtlas("../assets/giorono/goldExp.png", {
+    goldExp: {
+      x: 0,
+      y: 0,
+      width: 1057,
+      height: 978,
+      sliceX: 7,
+      sliceY: 6,
+      anims: {
+        idle: { from: 0, to: 0, speed: 1, loop: true },
+        walkForward: { from: 1, to: 1, speed: 1, loop: true },
+        walkBackward: { from: 2, to: 2, speed: 1, loop: true },
+        heavyPunch: { from: 12, to: 14, speed: 16 },
+        punch: { from: 6, to: 11, speed: 16 },
+        kick: { from: 15, to: 20, speed: 16 },
+        goldTree: { from: 21, to: 25, speed: 16 },
+        barrage: { from: 26, to: 37, speed: 24 },
+        jump: { from: 3, to: 5, speed: 12 },
+      },
+    },
+  });
+  //
   // //stage beach--
   loadSprite("jail", "../assets/stage_jail/jail.png");
   loadSprite("school", "../assets/stage_school/school.png");

@@ -25,8 +25,8 @@ async function pvp() {
       displayName: "MOHAMMAD AVDUL",
     },
     {
-      name: "kakyoin",
-      displayName: "NORYAKI KAKYOIN",
+      name: "giorono",
+      displayName: "GIORONO GIOVANNA",
     },
   ];
   scene("pvpScene", ({ p1, p2, nextScene }) => {
@@ -34,7 +34,12 @@ async function pvp() {
       volume: 0.6,
     });
     const bg = add([
-      sprite("bg", { anim: "idle", speed: 24 }),
+      sprite("bg", {
+        anim: "idle",
+        speed: 24,
+        tiled: true,
+        width: width() * 10,
+      }),
       pos(center()),
       origin("center"),
       z(0),

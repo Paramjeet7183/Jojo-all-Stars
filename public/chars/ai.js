@@ -61,23 +61,11 @@ async function ai({ player, stand, enemy, data, health, charge }) {
   });
   async function drawStand() {
     if (matchStarted == true) {
-      play(`${data.name}StandAppear`, {
-        volume: bgm,
-      });
       if (standDrawn) {
         destroy(stand);
         standDrawn = false;
       } else {
         if (!standDrawn) {
-          if (!soundPlayed) {
-            play(`${data.name}Stand`, {
-              volume: charSound,
-            });
-            soundPlayed = true;
-            wait(1, () => {
-              soundPlayed = false;
-            });
-          }
           readd(stand);
           standDrawn = true;
         }
@@ -124,12 +112,6 @@ async function ai({ player, stand, enemy, data, health, charge }) {
   player.onStateUpdate("runForward", () => {
     dist = Math.abs(player.pos.x - enemy.pos.x);
     player.flipX() ? simLeft() : simRight();
-    if (dist > 20 * vw) {
-      standDrawn ? drawStand() : () => {};
-      if (health < 11 * vw && randi(1, 100) == 24) {
-        simUp();
-      }
-    }
     if (dist < 20 * vw) {
       // player.enterState("idle", { waitTime: 3, nextState: "runBackward" });
       player.enterState("attack");
@@ -170,7 +152,7 @@ async function ai({ player, stand, enemy, data, health, charge }) {
         stand: stand,
       });
       canAttack = false;
-      wait((standDrawn ? sAttack[k].timeOut : nAttack[k].timeOut) + 0.5, () => {
+      wait(standDrawn ? sAttack[k].timeOut : nAttack[k].timeOut, () => {
         canAttack = true;
       });
     } else {

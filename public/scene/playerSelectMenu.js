@@ -9,7 +9,7 @@ async function playerSelectMenu() {
       "johnny",
       "jotaro",
       "avdul",
-      "jotaro",
+      "giorono",
       "johnny",
       "jotaro",
       "johnny",
@@ -309,7 +309,7 @@ async function playerSelectMenu() {
                 p2r: 0,
                 mode: "survive",
                 wins: 0,
-                stageNum: randi(0, 2),
+                stageNum: randi(1, 5),
               });
             },
           });
@@ -396,7 +396,7 @@ async function playerSelectMenu() {
               p1r: 0,
               p2r: 0,
               mode: mode,
-              stageNum: mode == "test" ? 2 : 1,
+              stageNum: mode == "test" ? 2 : randi(1, 5),
             });
           },
         });

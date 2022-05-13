@@ -25,7 +25,9 @@ async function collisions({
     const a = add([rect(0.2, 0.2), pos(p.pos), lifespan(0.3)]);
     a.onUpdate(() => {
       p.move(p.flipX() ? disX : -disX, -disY);
+      return;
     });
+    return;
   }
   const ef = [
     addEff1,
@@ -80,7 +82,9 @@ async function collisions({
       onCollide(cData[i].entities[0], H1, (e) => {
         if (cData[i].effect.length > 0) {
           for (let j = 0; j <= cData[i].effect.length - 1; j++) {
-            ef[cData[i].effect[j] - 1](e.pos);
+            ef[cData[i].effect[j] - 1](
+              e.pos.add(opponent.flipX() ? e.width : -e.width, -e.height / 2)
+            );
           }
         }
         shake(cData[i].shake);
@@ -99,7 +103,9 @@ async function collisions({
       onCollide(cData[i].entities[0], H2, (e) => {
         if (cData[i].effect.length > 0) {
           for (let j = 0; j <= cData[i].effect.length - 1; j++) {
-            ef[cData[i].effect[j] - 1](e.pos);
+            ef[cData[i].effect[j] - 1](
+              e.pos.add(opponent.flipX() ? e.width : -e.width, -e.height / 2)
+            );
           }
         }
         opponent.play("lowerHurt");

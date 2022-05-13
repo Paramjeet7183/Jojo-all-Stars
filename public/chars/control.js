@@ -29,9 +29,6 @@ function control({
   onKeyPress(key5, () => {
     // standDrawn
     if (matchStarted == true) {
-      play(`${data.name}StandAppear`, {
-        volume: bgm,
-      });
       if (standDrawn) {
         if (stand.curAnim() == "idle" && data.name !== "johnny") {
           destroy(stand);
@@ -45,10 +42,13 @@ function control({
         if (!standDrawn) {
           if (!soundPlayed) {
             play(`${data.name}Stand`, {
-              volume: charSound,
+              volume: charSound * 1.5,
+            });
+            play(`${data.name}StandAppear`, {
+              volume: bgm / 1.5,
             });
             soundPlayed = true;
-            wait(1, () => {
+            wait(1.2, () => {
               soundPlayed = false;
             });
           }

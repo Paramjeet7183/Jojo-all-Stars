@@ -32,6 +32,8 @@ const menu = {
     loadSprite(`jotaroBigFace`, `../assets/menuFaces/jotaroBigFace.png`);
     loadSprite(`avdulMiniFace`, `../assets/menuFaces/avdulMiniFace.png`);
     loadSprite(`avdulBigFace`, `../assets/menuFaces/avdulBigFace.png`);
+    loadSprite(`gioronoMiniFace`, `../assets/menuFaces/gioronoMiniFace.png`);
+    loadSprite(`gioronoBigFace`, `../assets/menuFaces/gioronoBigFace.png`);
 
     loadSprite("p1", "../assets/menu/p1.png");
     loadSprite("p1s", "../assets/menu/p1s.png");
@@ -144,8 +146,6 @@ const menu = {
         scale(Math.min(width() / 1280, height() / 720)),
         z(1),
       ]);
-
-      //arrow at the bootm with select and esc instruction
       const arrow = add([
         sprite("arrow"),
         pos(width(), 95 * vh),
@@ -206,7 +206,7 @@ const menu = {
             go("playerOneSelectMenu", { mode: "test" }); //watching the match cpu mode
             break;
           case 5:
-            go("setting");
+            go("menu");
             break;
           case 6:
             go("intro");

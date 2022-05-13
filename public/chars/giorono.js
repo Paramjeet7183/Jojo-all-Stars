@@ -1,15 +1,12 @@
 const allAnim = [
   "kick",
+  "kick2",
   "punch",
-  "pose4",
-  "pose3",
-  "pose2",
   "pose1",
   "walkForward",
   "walkBackward",
   "upperHurt",
   "lowerHurt",
-  "crouchHurt",
   "fall",
 ];
 const allStandAnim = [
@@ -18,106 +15,127 @@ const allStandAnim = [
   "punch",
   "kick",
   "punch2",
-  "kick",
   "barrage",
-  "special",
   "heavyPunch",
   "jump",
+  "goldTree",
 ];
-
 const playerHitBoxData = [
   {
     //punch
-    frame: 47,
-    position: vec2(256, -200),
-    size: { w: 32, h: 32 },
-    tag: "jotaroPunch",
+    frame: 18,
+    position: vec2(36, -260),
+    size: { w: 128, h: 32 },
+    tag: "gioronoPunch",
   },
   {
     //kick
-    frame: 54,
-    position: vec2(100, -50),
-    size: { w: 80, h: 50 },
-    tag: "jotaroKick",
+    frame: 22,
+    position: vec2(64, -232),
+    size: { w: 164, h: 64 },
+    tag: "gioronoKick",
+  },
+  {
+    //kick2
+    frame: 27,
+    position: vec2(170, -132),
+    size: { w: 48, h: 48 },
+    tag: "gioronoPunch",
   },
 ];
 const standHitBoxData = [
   {
     //punch
-    frame: 29,
+    frame: 7,
+    soundFrame: 6,
+    sound: "punchWooshSound1",
+    position: vec2(32, -48),
+    size: { w: 64, h: 48 },
+    tag: "goldExpPunch",
+  },
+  {
+    //punch
+    frame: 10,
+    soundFrame: 8,
+    sound: "punchWooshSound1",
+    position: vec2(32, -32),
+    size: { w: 136, h: 48 },
+    tag: "goldExpPunch",
+  },
+  {
+    //heavyPunch
+    frame: 13,
+    soundFrame: 12,
+    sound: "punchWooshSound1",
+    position: vec2(32, 0),
+    size: { w: 184, h: 48 },
+    tag: "goldExpHeavyPunch",
+  },
+  {
+    //Kick
+    frame: 18,
+    soundFrame: 16,
+    sound: "punchWooshSound1",
+    position: vec2(64, -64),
+    size: { w: 96, h: 48 },
+    tag: "goldExpKick",
+  },
+  {
+    //barrage
+    frame: 26,
+    soundFrame: 26,
+    sound: "punchWooshSound1",
+    position: vec2(0, 80),
+    size: { w: 150, h: 200 },
+    tag: "goldExpBarrage",
+  },
+  {
+    //barrage
+    frame: 28,
+    soundFrame: 27,
+    sound: "punchWooshSound1",
+    position: vec2(0, 80),
+    size: { w: 150, h: 200 },
+    tag: "goldExpBarrage",
+  },
+  {
+    //barrage
+    frame: 30,
     soundFrame: 29,
     sound: "punchWooshSound1",
-    position: vec2(30, -48),
-    size: { w: 128, h: 48 },
-    tag: "starPlatinumPunch1",
+    position: vec2(0, 80),
+    size: { w: 150, h: 200 },
+    tag: "goldExpBarrage",
   },
   {
-    //punch2
-    frame: 36,
+    //barrage
+    frame: 32,
+    soundFrame: 31,
+    sound: "punchWooshSound1",
+    position: vec2(0, 80),
+    size: { w: 150, h: 200 },
+    tag: "goldExpBarrage",
+  },
+  {
+    frame: 34,
     soundFrame: 33,
     sound: "punchWooshSound1",
-    position: vec2(80, 0),
-    size: { w: 128, h: 48 },
-    tag: "starPlatinumPunch2",
+    position: vec2(0, 80),
+    size: { w: 150, h: 200 },
+    tag: "goldExpBarrage",
   },
   {
-    //heavy punch
-    frame: 43,
-    soundFrame: 40,
+    frame: 36,
+    soundFrame: 35,
     sound: "punchWooshSound1",
-    position: vec2(75, -20),
-    size: { w: 200, h: 48 },
-    tag: "starPlatinumHeavyPunch",
-  },
-  {
-    //kick
-    frame: 54,
-    soundFrame: 50,
-    sound: "punchWooshSound1",
-    position: vec2(164, 130),
-    size: { w: 48, h: 48 },
-    tag: "starPlatinumKick",
-  },
-  {
-    //barrage 1
-    frame: 61,
-    soundFrame: 59,
-    sound: "punchWooshSound1",
-    position: vec2(140, -40),
-    size: { w: 48, h: 48 },
-    tag: "starPlatinumBarrage",
-  },
-  {
-    //barrage 2
-    frame: 64,
-    soundFrame: 62,
-    sound: "punchWooshSound1",
-    position: vec2(116, 0),
-    size: { w: 48, h: 48 },
-    tag: "starPlatinumBarrage",
-  },
-  {
-    //barrage 3
-    frame: 67,
-    soundFrame: 65,
-    sound: "punchWooshSound1",
-    position: vec2(144, 44),
-    size: { w: 48, h: 48 },
-    tag: "starPlatinumBarrage",
-  },
-  {
-    //barrage 3
-    frame: 70,
-    soundFrame: 68,
-    sound: "punchWooshSound1",
-    position: vec2(128, -100),
-    size: { w: 48, h: 48 },
-    tag: "starPlatinumBarrage",
+    position: vec2(0, 80),
+    size: { w: 150, h: 200 },
+    tag: "goldExpBarrage",
   },
 ];
 const collisionData = [
   {
-    entities: ["jotaroPunch", "H1"],
+    entities: ["gioronoPunch", "H1"],
     collideSound: "punchSound3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.25,
@@ -129,7 +147,7 @@ const collisionData = [
     shake: 2,
   },
   {
-    entities: ["jotaroPunch", "H2"],
+    entities: ["gioronoPunch", "H2"],
     collideSound: "punchSound3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.25,
@@ -141,146 +159,122 @@ const collisionData = [
     shake: 2,
   },
   {
-    entities: ["jotaroKick", "H1"],
+    entities: ["gioronoKick", "H1"],
     collideSound: "punchSound3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.25,
     soundTimeOut: 0.5,
-    attackDamage: 1.5, //1
+    attackDamage: 1.5,
     effect: [1],
     pushX: 26,
     pushY: 0,
     shake: 4,
   },
   {
-    entities: ["jotaroKick", "H2"],
+    entities: ["gioronoKick", "H2"],
     collideSound: "punchSound3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.25,
     soundTimeOut: 0.5,
-    attackDamage: 1.5, //1
+    attackDamage: 1.5,
     effect: [1],
     pushX: 26,
     pushY: 0,
     shake: 4,
   },
   {
-    entities: ["starPlatinumPunch1", "H1"],
-    collideSound: "punchSound2",
+    entities: ["goldExpPunch", "H1"],
+    collideSound: "goldExpPunchEff3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.25,
     soundTimeOut: 0.5,
     attackDamage: 2,
     effect: [3],
-    pushX: 50,
+    pushX: 26,
     pushY: 0,
     shake: 4,
   },
   {
-    entities: ["starPlatinumPunch1", "H2"],
-    collideSound: "punchSound2",
+    entities: ["goldExpPunch", "H2"],
+    collideSound: "punchSound3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.25,
     soundTimeOut: 0.5,
     attackDamage: 2,
     effect: [3],
-    pushX: 50,
+    pushX: 26,
     pushY: 0,
     shake: 4,
   },
   {
-    entities: ["starPlatinumPunch2", "H1"],
-    collideSound: "punchSound2",
-    collisionTimeOut: 0.2,
-    pauseTimeOut: 0.25,
-    soundTimeOut: 0.5,
-    attackDamage: 2,
-    effect: [3],
-    pushX: 50,
-    pushY: 0,
-    shake: 4,
-  },
-  {
-    entities: ["starPlatinumPunch2", "H2"],
-    collideSound: "punchSound2",
-    collisionTimeOut: 0.2,
-    pauseTimeOut: 0.25,
-    soundTimeOut: 0.5,
-    attackDamage: 2,
-    pushX: 50,
-    pushY: 0,
-    effect: [3],
-    shake: 4,
-  },
-  {
-    entities: ["starPlatinumKick", "H1"],
-    collideSound: "punchSound2",
+    entities: ["goldExpKick", "H1"],
+    collideSound: "goldExpPunchEff3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.25,
     soundTimeOut: 0.5,
     attackDamage: 2.5,
     effect: [3],
-    pushX: 64,
+    pushX: 26,
     pushY: 0,
     shake: 6,
   },
   {
-    entities: ["starPlatinumKick", "H2"],
-    collideSound: "punchSound2",
+    entities: ["goldExpKick", "H2"],
+    collideSound: "goldExpPunchEff3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.25,
     soundTimeOut: 0.5,
     attackDamage: 2.5,
     effect: [3],
-    pushX: 64,
+    pushX: 26,
     pushY: 0,
     shake: 6,
   },
   {
-    entities: ["starPlatinumHeavyPunch", "H1"],
-    collideSound: "punchSound2",
+    entities: ["goldExpHeavyPunch", "H1"],
+    collideSound: "goldExpPunchEff3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.25,
     soundTimeOut: 0.5,
     attackDamage: 3,
     effect: [3],
-    pushX: 80,
+    pushX: 26,
     pushY: 0,
     shake: 6,
   },
   {
-    entities: ["starPlatinumHeavyPunch", "H2"],
-    collideSound: "punchSound2",
+    entities: ["goldExpHeavyPunch", "H2"],
+    collideSound: "goldExpPunchEff3",
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.25,
     soundTimeOut: 0.5,
     attackDamage: 3,
     effect: [3],
-    pushX: 80,
+    pushX: 26,
     pushY: 0,
     shake: 6,
   },
   {
-    entities: ["starPlatinumBarrage", "H1"],
-    collideSound: "punchSound2",
-    collisionTimeOut: 0.2,
-    pauseTimeOut: 0.25,
+    entities: ["goldExpBarrage", "H1"],
+    collideSound: "goldExpPunchEff3",
+    collisionTimeOut: 0.1,
+    pauseTimeOut: 0.4,
     soundTimeOut: 0.5,
-    attackDamage: 3.5, //temp - original - 2.5
+    attackDamage: 3.5,
     effect: [3],
-    pushX: 40,
+    pushX: 26,
     pushY: 0,
     shake: 10,
   },
   {
-    entities: ["starPlatinumBarrage", "H2"],
-    collideSound: "punchSound2",
-    collisionTimeOut: 0.2,
-    pauseTimeOut: 0.25,
+    entities: ["goldExpBarrage", "H2"],
+    collideSound: "goldExpPunchEff3",
+    collisionTimeOut: 0.1,
+    pauseTimeOut: 0.4,
     soundTimeOut: 0.5,
     attackDamage: 3.5,
     effect: [3],
-    pushX: 40,
+    pushX: 26,
     pushY: 0,
     shake: 10,
   },
@@ -345,17 +339,43 @@ const hurtBoxData = [
 ];
 const punch = {
   ex: true,
-  timeOut: 0.45,
+  timeOut: 0.35,
   anim: "punch",
   fun: ({ player, stand }) => {
     play("punchWooshSound3", {
       volume: airSound,
     });
-    play("muh", {
+    play("gioronoAtt1", {
       volume: charSound,
     });
   },
 };
+// const crouchPunch = {
+//   ex: true,
+//   timeOut: 0.45,
+//   anim: "crouchPunch",
+//   fun: ({ player, stand }) => {
+//     play("punchWooshSound3", {
+//       volume: airSound,
+//     });
+//     play("gioronoAtt1", {
+//       volume: charSound,
+//     });
+//   },
+// };
+// const crouchKick = {
+//   ex: true,
+//   timeOut: 0.45,
+//   anim: "crouchKick",
+//   fun: ({ player, stand }) => {
+//     play("punchWooshSound3", {
+//       volume: airSound,
+//     });
+//     play("gioronoAtt2", {
+//       volume: charSound,
+//     });
+//   },
+// };
 const kick = {
   ex: true,
   timeOut: 0.5,
@@ -364,61 +384,77 @@ const kick = {
     play("punchWooshSound2", {
       volume: airSound,
     });
-    play("muh", {
+    play("gioronoAtt4", {
+      volume: charSound,
+    });
+  },
+};
+const kick2 = {
+  ex: true,
+  timeOut: 0.38,
+  anim: "kick2",
+  fun: ({ player, stand }) => {
+    play("punchWooshSound2", {
+      volume: airSound,
+    });
+    play("gioronoAtt2", {
       volume: charSound,
     });
   },
 };
 const standPunch = {
   ex: true,
-  anim: "pose4",
-  timeOut: 0.8,
+  anim: "pose1",
+  timeOut: 0.7,
   fun: ({ player, stand }) => {
     stand.play("punch");
-    play("muh", {
+    play("gioronoMuda3", {
       volume: charSound,
     });
   },
 };
 const standKick = {
   ex: true,
-  anim: "pose4",
+  anim: "pose1",
   timeOut: 0.55,
   fun: ({ player, stand }) => {
     stand.play("kick");
-    play("orayo", {
+    play("gioronoMuda3", {
       volume: charSound,
     });
   },
 };
 const standHeavyPunch = {
   ex: true,
-  anim: "pose3",
-  timeOut: 0.55,
+  anim: "pose1",
+  timeOut: 0.5,
   fun: ({ player, stand }) => {
     stand.play("heavyPunch");
-    play("ora", {
+    play("gioronoMuda3", {
       volume: charSound * 1.5,
     });
   },
 };
-const standSpecial = {
-  ex: true,
-  anim: "pose1",
-  timeOut: 2.5,
-  fun: ({ player, stand }) => {
-    stand.play("special");
-  },
-};
 const standBarrage = {
   ex: true,
-  anim: "pose2",
-  timeOut: 1.1,
+  anim: "pose1",
+  timeOut: 1,
   fun: ({ player, stand }) => {
     stand.play("barrage");
-    play("long ooh", {
+    play("gioronoMuda2", {
       volume: charSound,
       seek: 0.5,
+    });
+  },
+};
+const standTree = {
+  ex: true,
+  anim: "pose1",
+  timeOut: 0.6,
+  fun: ({ player, stand }) => {
+    stand.play("goldTree");
+    play("gioronoMuda3", {
+      volume: charSound,
     });
   },
 };
@@ -430,11 +466,11 @@ const empty = {
     console.log("empty");
   },
 };
-const jotaro = {
-  name: "jotaro",
-  standName: "starPlatinum",
-  displayName: "JOTARO KUJO",
-  speed: 400,
+const giorono = {
+  name: "giorono",
+  standName: "goldExp",
+  displayName: "GIORONO GIOVANNA",
+  speed: 460,
   jumpForce: 1256,
   scale: 3,
   allAnim: allAnim,
@@ -443,13 +479,13 @@ const jotaro = {
   hurtBoxData: hurtBoxData,
   standHitBoxData: standHitBoxData,
   collisionData: collisionData,
-  areaOffset: vec2(0, -12),
-  standOffset: vec2(150, -256),
+  areaOffset: vec2(0, -30),
+  standOffset: vec2(64, -300),
   normalKey: {
     w: punch,
-    a: kick,
+    a: kick2,
     s: punch,
-    d: empty,
+    d: kick,
     wDown: empty,
     aDown: empty,
     sDown: empty,
@@ -464,7 +500,7 @@ const jotaro = {
     a: standHeavyPunch,
     s: standPunch,
     d: standKick,
-    wDown: empty,
+    wDown: standTree,
     aDown: empty,
     sDown: empty,
     dDown: empty,
@@ -474,4 +510,4 @@ const jotaro = {
     dUp: empty,
   },
 };
-export { jotaro };
+export { giorono };

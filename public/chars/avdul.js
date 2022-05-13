@@ -1,3 +1,5 @@
+import { addFire } from "./effects.js";
+
 const allAnim = [
   "walkForward",
   "walkBackward",
@@ -137,7 +139,7 @@ const collisionData = [
     effect: [1],
     pushX: 26,
     pushY: 0,
-    shake: 2,
+    shake: 4,
   },
   {
     entities: ["avdulPunch", "H2"],
@@ -149,7 +151,7 @@ const collisionData = [
     effect: [1],
     pushX: 26,
     pushY: 0,
-    shake: 2,
+    shake: 4,
   },
   {
     entities: ["avdulChop", "H1"],
@@ -161,6 +163,7 @@ const collisionData = [
     effect: [1],
     pushX: 26,
     pushY: 0,
+    shake: 4,
   },
   {
     entities: ["avdulChop", "H2"],
@@ -172,6 +175,7 @@ const collisionData = [
     effect: [1],
     pushX: 26,
     pushY: 0,
+    shake: 4,
   },
   {
     entities: ["avdulKick", "H1"],
@@ -183,6 +187,7 @@ const collisionData = [
     effect: [1],
     pushX: 26,
     pushY: 0,
+    shake: 8,
   },
   {
     entities: ["avdulKick", "H2"],
@@ -194,7 +199,7 @@ const collisionData = [
     effect: [1],
     pushX: 26,
     pushY: 0,
-    shake: 2,
+    shake: 8,
   },
   {
     entities: ["mrPunch", "H1"],
@@ -203,10 +208,10 @@ const collisionData = [
     pauseTimeOut: 0.4,
     soundTimeOut: 0.5,
     attackDamage: 2.2,
-    effect: [1],
+    effect: [3, 8],
     pushX: 26,
     pushY: 0,
-    shake: 2,
+    shake: 4,
   },
   {
     entities: ["mrPunch", "H2"],
@@ -215,10 +220,10 @@ const collisionData = [
     pauseTimeOut: 0.4,
     soundTimeOut: 0.5,
     attackDamage: 2.2,
-    effect: [1],
+    effect: [3, 8],
     pushX: 26,
     pushY: 0,
-    shake: 2,
+    shake: 4,
   },
   {
     entities: ["mrKick", "H1"],
@@ -227,10 +232,10 @@ const collisionData = [
     pauseTimeOut: 0.4,
     soundTimeOut: 0.5,
     attackDamage: 2.2,
-    effect: [1],
+    effect: [3, 8],
     pushX: 26,
     pushY: 0,
-    shake: 2,
+    shake: 4,
   },
   {
     entities: ["mrKick", "H2"],
@@ -239,10 +244,34 @@ const collisionData = [
     pauseTimeOut: 0.4,
     soundTimeOut: 0.5,
     attackDamage: 2.2,
-    effect: [1],
+    effect: [3, 8],
     pushX: 26,
     pushY: 0,
-    shake: 2,
+    shake: 4,
+  },
+  {
+    entities: ["mrFireBall", "H1"],
+    collideSound: "punchSound1",
+    collisionTimeOut: 0.2,
+    pauseTimeOut: 0.5,
+    soundTimeOut: 0.5,
+    attackDamage: 5,
+    effect: [3],
+    pushX: 0,
+    pushY: 0,
+    shake: 10,
+  },
+  {
+    entities: ["mrFireBall", "H2"],
+    collideSound: "punchSound1",
+    collisionTimeOut: 0.2,
+    pauseTimeOut: 0.5,
+    soundTimeOut: 0.5,
+    attackDamage: 5,
+    effect: [3],
+    pushX: 0,
+    pushY: 0,
+    shake: 10,
   },
 ];
 const chop = {
@@ -252,6 +281,9 @@ const chop = {
   fun: ({ player, stand }) => {
     play("punchWooshSound3", {
       volume: airSound,
+    });
+    play("avdulAtt1", {
+      volume: charSound,
     });
   },
 };
@@ -263,6 +295,9 @@ const kick = {
     play("punchWooshSound3", {
       volume: airSound,
     });
+    play("avdulAtt2", {
+      volume: charSound,
+    });
   },
 };
 const kick2 = {
@@ -272,6 +307,9 @@ const kick2 = {
   fun: ({ player, stand }) => {
     play("punchWooshSound3", {
       volume: airSound,
+    });
+    play("avdulAtt3", {
+      volume: charSound,
     });
   },
 };
@@ -283,6 +321,9 @@ const heavyPunch = {
     play("punchWooshSound3", {
       volume: airSound,
     });
+    play("avdulAtt3", {
+      volume: charSound,
+    });
   },
 };
 const standPunch = {
@@ -291,6 +332,9 @@ const standPunch = {
   anim: "idle",
   fun: ({ player, stand }) => {
     stand.play("punch");
+    play("avdulAtt1", {
+      volume: charSound,
+    });
   },
 };
 const standkick = {
@@ -299,6 +343,9 @@ const standkick = {
   anim: "idle",
   fun: ({ player, stand }) => {
     stand.play("kick");
+    play("avdulAtt2", {
+      volume: charSound,
+    });
   },
 };
 const throwFireBall = {
@@ -307,6 +354,23 @@ const throwFireBall = {
   anim: "pose1",
   fun: ({ player, stand }) => {
     stand.play("throwFireBall");
+    play("avdulAtt3", {
+      volume: charSound,
+    });
+    const f = add([
+      sprite("avdulFireBall", { anim: "idle" }),
+      area(),
+      pos(player.pos.add(256, -280)),
+      move(player.flipX() ? LEFT : RIGHT, 800),
+      cleanup(),
+      origin("center"),
+      layer("effect"),
+      scale(3),
+      "mrFireBall",
+    ]);
+    f.onCollide("hurtBox", () => {
+      f.destroy();
+    });
   },
 };
 const empty = {

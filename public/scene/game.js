@@ -5,14 +5,16 @@ import stage from "../stages/stage.js";
 import { healthBar, chargeBar } from "../chars/hud.js";
 import { ai } from "../chars/ai.js";
 import { johnny } from "../chars/johnny.js";
+import { giorono } from "../chars/giorono.js";
 import { control } from "../chars/control.js";
 import { collisions } from "../chars/collisons.js";
+import { touchControl } from "../chars/touchControl.js";
 async function Game() {
   const allPlayer = [
     johnny,
     jotaro,
     avdul,
-    johnny,
+    giorono,
     jotaro,
     avdul,
     johnny,
@@ -31,11 +33,9 @@ async function Game() {
     console.log("stageNum", stageNum);
     //stage
     stage(stageNum);
-    if (mode == "test") {
-      onKeyPress("v", () => {
-        go("menu");
-      });
-    }
+    onKeyPress("v", () => {
+      go("menu");
+    });
     const p = new Player({
       dataObj: allPlayer[p1],
       spawnPos: 12 * vw,
@@ -99,7 +99,13 @@ async function Game() {
       xCharge: -13 * vw,
       originCharge: "botright",
     });
-
+    if (isTouch()) {
+      touchControl({
+        player: player,
+        data: allPlayer[p1],
+        stand: playerStand,
+      });
+    }
     //player controls
     control({
       player: player,
@@ -116,37 +122,33 @@ async function Game() {
       key5: "c",
     });
     // player control End
-    // ai({
-    //   player: enemy,
-    //   stand: enemyStand,
-    //   enemy: player,
-    //   data: allPlayer[p2],
-    //   health: enemyHealth,
-    //   charge: enemyCharge,
-    // });
-    // ai({
-    //   player: player,
-    //   stand: playerStand,
-    //   enemy: enemy,
-    //   data: allPlayer[p1],
-    //   health: playerHealth,
-    //   charge: playerCharge,
-    // });
-    //enemy controls
-    control({
-      player: enemy,
-      data: allPlayer[p2],
-      stand: enemyStand,
-      up: "i",
-      down: "k",
-      left: "j",
-      right: "l",
-      key1: "5",
-      key2: "1",
-      key3: "2",
-      key4: "3",
-      key5: "4",
-    });
+    if (mode !== "test") {
+      ai({
+        player: enemy,
+        stand: enemyStand,
+        enemy: player,
+        data: allPlayer[p2],
+        health: enemyHealth,
+        charge: enemyCharge,
+      });
+    } else {
+      if (mode == "test") {
+        control({
+          player: enemy,
+          data: allPlayer[p2],
+          stand: enemyStand,
+          up: "i",
+          down: "k",
+          left: "j",
+          right: "l",
+          key1: "5",
+          key2: "1",
+          key3: "2",
+          key4: "3",
+          key5: "4",
+        });
+      }
+    }
     // enemy control End
     collisions({
       me: allPlayer[p1],
@@ -539,8 +541,6 @@ async function Game() {
         }
       });
       // winner == "p1"
-      //   ? (player.play("win", { loop: true }), enemy.play("fall"))
-      //   : (enemy.play("win"), player.play("fall"));
       if (winner == "p1") {
         player.play("win", { loop: true });
       } else {
@@ -582,7 +582,7 @@ async function Game() {
         }
       }
       // checking winner after the time is up
-      //checking if game mode is training it it is keep running dont go to endRound function
+      //checking if game mode is training then keep running dont go to endRound function
       if (time == 0) {
         if (playerHealth.get() > enemyHealth.get()) {
           mode == "test"

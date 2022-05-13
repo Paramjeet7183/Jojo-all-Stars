@@ -73,7 +73,7 @@ async function addFire(position) {
     sprite("fireEffect", { anim: "idle" }),
     pos(position),
     origin("bot"),
-    scale(2.5),
+    scale(3),
     lifespan(0.7),
     layer("effect"),
   ]);

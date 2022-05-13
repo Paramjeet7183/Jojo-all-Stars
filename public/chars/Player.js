@@ -31,7 +31,6 @@ class Player {
       state("idle", ["idle", "runForward", "runBackward", "attack"]),
       `${tag}`,
     ]);
-
     //fighters stand
     this.stand = add([
       sprite(dataObj.standName, {
@@ -46,6 +45,7 @@ class Player {
       "stand",
       `${dataObj.standName}`,
     ]);
+    //shadow
     this.pShadow = add([
       sprite(dataObj.name),
       pos(this.player.x, height() - 5 * vh + dataObj.areaOffset.y - 16),
@@ -143,7 +143,7 @@ class Player {
         origin(ORIGIN),
         layer("pvp"),
         opacity(0),
-        outline(4, RED),
+        // outline(4, RED),
         lifespan(0.1),
         "hitBox",
         `${TAG}`,
