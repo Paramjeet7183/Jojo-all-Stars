@@ -1,4 +1,4 @@
-async function ai({ player, stand, enemy, data, health, charge }) {
+async function ai({ player, stand, enemy, data, health, chargeBar }) {
   let canAttack = true;
   // let nKey = data.normalKey;
   // let sKey = data.standKey;
@@ -150,6 +150,7 @@ async function ai({ player, stand, enemy, data, health, charge }) {
       (standDrawn ? sAttack[k] : nAttack[k]).fun({
         player: player,
         stand: stand,
+        chargeBar: chargeBar,
       });
       canAttack = false;
       wait(standDrawn ? sAttack[k].timeOut : nAttack[k].timeOut, () => {

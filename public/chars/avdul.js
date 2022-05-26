@@ -1,16 +1,17 @@
 import { addFire } from "./effects.js";
 
 const allAnim = [
-  "walkForward",
-  "walkBackward",
-  "chop",
-  "kick",
-  "kick2",
-  "heavyPunch",
-  "pose1",
-  "upperHurt",
-  "lowerHurt",
-  "crouchHurt",
+  { name: "kick", onEnd: "idle" },
+  { name: "getup", onEnd: "idle" },
+  { name: "heavyPunch", onEnd: "idle" },
+  { name: "kick2", onEnd: "idle" },
+  { name: "chop", onEnd: "idle" },
+  { name: "walkForward", onEnd: "idle" },
+  { name: "walkBackward", onEnd: "idle" },
+  { name: "pose1", onEnd: "idle" },
+  { name: "upperHurt", onEnd: "idle" },
+  { name: "lowerHurt", onEnd: "idle" },
+  { name: "crouchHurt", onEnd: "idle" },
 ];
 const allStandAnim = [
   "walkBackward",
@@ -24,8 +25,8 @@ const playerHitBoxData = [
   {
     //chop
     frame: 37,
-    position: vec2(180, -264),
-    size: { w: 32, h: 32 },
+    position: vec2(40, -280),
+    size: { w: 140, h: 32 },
     tag: "avdulChop",
   },
   {
@@ -74,8 +75,8 @@ const hurtBoxData = [
   {
     anim: "idle",
     one: {
-      offset: vec2(16, -242),
-      size: { w: 128, h: 100 },
+      offset: vec2(24, -242),
+      size: { w: 140, h: 150 },
     },
     two: {
       offset: vec2(32, -32),
@@ -86,7 +87,7 @@ const hurtBoxData = [
     anim: "walkForward",
     one: {
       offset: vec2(64, -242),
-      size: { w: 128, h: 100 },
+      size: { w: 140, h: 150 },
     },
     two: {
       offset: vec2(64, -32),
@@ -97,8 +98,7 @@ const hurtBoxData = [
     anim: "walkBackward",
     one: {
       offset: vec2(64, -242),
-      size: { w: 128, h: 100 },
-      angle: 0,
+      size: { w: 140, h: 150 },
     },
     two: {
       offset: vec2(64, -32),
@@ -108,11 +108,11 @@ const hurtBoxData = [
   {
     anim: "crouch",
     one: {
-      offset: vec2(-32, -142),
-      size: { w: 80, h: 64 },
+      offset: vec2(64, -110),
+      size: { w: 150, h: 100 },
     },
     two: {
-      offset: vec2(24, -32),
+      offset: vec2(64, -12),
       size: { w: 144, h: 90 },
     },
   },
@@ -330,29 +330,31 @@ const standPunch = {
   ex: true,
   timeOut: 0.45,
   anim: "idle",
-  fun: ({ player, stand }) => {
+  fun: ({ player, stand, chargeBar }) => {
     stand.play("punch");
     play("avdulAtt1", {
       volume: charSound,
     });
+    chargeBar.discharge(10);
   },
 };
 const standkick = {
   ex: true,
   timeOut: 0.45,
   anim: "idle",
-  fun: ({ player, stand }) => {
+  fun: ({ player, stand, chargeBar }) => {
     stand.play("kick");
     play("avdulAtt2", {
       volume: charSound,
     });
+    chargeBar.discharge(10);
   },
 };
 const throwFireBall = {
   ex: true,
   timeOut: 0.45,
   anim: "pose1",
-  fun: ({ player, stand }) => {
+  fun: ({ player, stand, chargeBar }) => {
     stand.play("throwFireBall");
     play("avdulAtt3", {
       volume: charSound,
@@ -371,6 +373,7 @@ const throwFireBall = {
     f.onCollide("hurtBox", () => {
       f.destroy();
     });
+    chargeBar.discharge(40);
   },
 };
 const empty = {
@@ -388,6 +391,10 @@ const avdul = {
   speed: 400,
   jumpForce: 1100,
   scale: 3,
+  width: 4,
+  height: 4,
+  standWidth: 4,
+  standHeight: 4,
   allAnim: allAnim,
   allStandAnim: allStandAnim,
   hitBoxData: playerHitBoxData,

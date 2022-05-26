@@ -1,5 +1,6 @@
 async function loadAssets() {
   //round start assets
+  loadSound("theme", "../assets/sound/theme.mp3");
   loadSprite("fightLogo", "../assets/hud/fight.png");
   loadSprite("winLogo", "../assets/hud/win.png");
   loadSprite("loseLogo", "../assets/hud/lose.png");
@@ -143,6 +144,18 @@ async function loadAssets() {
       },
     },
   });
+  loadSpriteAtlas("../assets/effects/eff13.png", {
+    lightning: {
+      x: 0,
+      y: 0,
+      width: 910,
+      height: 59,
+      sliceX: 14,
+      anims: {
+        idle: { from: 0, to: 13, speed: 24 },
+      },
+    },
+  });
   //jotaro---
   loadSound("jotaroHurt1", "../assets/jotaro/hurt (1).wav");
   loadSound("jotaroHurt2", "../assets/jotaro/hurt (2).wav");
@@ -150,6 +163,7 @@ async function loadAssets() {
   loadSound("jotaroStand", "../assets/jotaro/starplatinum.wav");
   loadSound("jotaroStandAppear", "../assets/jotaro/deploy.wav");
   loadSound("long ooh", "../assets/jotaro/long ooh.wav");
+  loadSound("jotaroCharge", "../assets/jotaro/long ooh.wav");
   loadSound("orayo", "../assets/jotaro/orayo.wav");
   loadSound("ora", "../assets/jotaro/ora (4).wav");
   loadSound("muh", "../assets/jotaro/muh.wav");
@@ -179,10 +193,10 @@ async function loadAssets() {
     jotaro: {
       x: 0,
       y: 0,
-      width: 2244,
-      height: 1815,
-      sliceX: 11,
-      sliceY: 11,
+      width: 2652,
+      height: 2088,
+      sliceX: 13,
+      sliceY: 12,
       anims: {
         idle: { from: 0, to: 7, speed: 16, loop: true },
         walkForward: { from: 8, to: 23, speed: 24, loop: true },
@@ -193,13 +207,17 @@ async function loadAssets() {
         pose2: { from: 58, to: 82, speed: 24 },
         pose3: { from: 94, to: 105, speed: 24 },
         pose4: { from: 106, to: 114, speed: 24 },
+        charge: { from: 109, to: 109, speed: 1 },
         win: { from: 38, to: 43, speed: 24 },
-        jump: { from: 83, to: 93, speed: 24 },
+        jump: { from: 83, to: 93, speed: 16 },
         crouch: { from: 32, to: 34, speed: 24 },
         upperHurt: { from: 115, to: 115, speed: 8 },
-        fall: { from: 116, to: 116, speed: 8 },
-        crouchHurt: { from: 117, to: 117, speed: 8 },
-        lowerHurt: { from: 118, to: 118, speed: 8 },
+        fall: { from: 118, to: 128, speed: 16 },
+        getup: { from: 129, to: 134, speed: 24 },
+        crouchHurt: { from: 116, to: 116, speed: 8 },
+        lowerHurt: { from: 117, to: 117, speed: 8 },
+        jumpKick: { from: 135, to: 137, speed: 8 },
+        crouchPunch: { from: 138, to: 146, speed: 20 },
       },
     },
   });
@@ -218,10 +236,24 @@ async function loadAssets() {
   loadSound("johnnyHurt1", "../assets/jhonny/hurt (1).wav");
   loadSound("johnnyHurt2", "../assets/jhonny/hurt (2).wav");
   loadSound("johnnyHurt3", "../assets/jhonny/hurt (3).wav");
-  loadSound("chummi", "../assets/jhonny/chummi (1).wav");
+  // loadSound("chummi", "../assets/jhonny/chummi (1).wav");
+  loadSound("johnnyCharge", "../assets/jhonny/charge (1).wav");
   // loadSound("johnnyTheme", "../assets/jhonny/theme.mp3");
   loadSprite("tusk", "../assets/jhonny/tusk3.png");
   loadSprite("bullet", "../assets/jhonny/07.png");
+  loadSpriteAtlas("../assets/jhonny/blueTrail.png", {
+    blueTrail: {
+      x: 0,
+      y: 0,
+      width: 57,
+      height: 237,
+      sliceX: 3,
+      sliceY: 3,
+      anims: {
+        idle: { from: 0, to: 8, speed: 24, loop: true },
+      },
+    },
+  });
   loadSpriteAtlas("../assets/jhonny/bulletTrail.png", {
     bulletTrail: {
       x: 0,
@@ -269,7 +301,7 @@ async function loadAssets() {
       sliceX: 5,
       sliceY: 4,
       anims: {
-        idle: { from: 0, to: 19, speed: 40 },
+        idle: { from: 0, to: 19, speed: 48 },
       },
     },
   });
@@ -290,9 +322,9 @@ async function loadAssets() {
     johnny: {
       x: 0,
       y: 0,
-      width: 1836,
-      height: 1500,
-      sliceX: 12,
+      width: 1911,
+      height: 1332,
+      sliceX: 13,
       sliceY: 12,
       anims: {
         idle: { from: 0, to: 3, speed: 16, loop: true },
@@ -314,7 +346,8 @@ async function loadAssets() {
         crouchPunch: { from: 91, to: 96, speed: 16 }, //3
         crouchPunch2: { from: 97, to: 107, speed: 16 }, //6
         crouchHurt: { from: 83, to: 86, speed: 24 },
-        fall: { from: 83, to: 86, speed: 24 },
+        fall: { from: 137, to: 142, speed: 24 },
+        getup: { from: 143, to: 148, speed: 24 },
       },
     },
   });
@@ -339,11 +372,13 @@ async function loadAssets() {
         kick2: { from: 46, to: 53, speed: 24 },
         heavyPunch: { from: 54, to: 62, speed: 24 },
         pose1: { from: 63, to: 67, speed: 24 },
-        win: { from: 63, to: 67, speed: 24 },
+        charge: { from: 66, to: 66, speed: 1 },
+        win: { from: 65, to: 67, speed: 24 },
         pose1loop: { from: 68, to: 71, speed: 24, loop: true },
         upperHurt: { from: 72, to: 72, speed: 24 },
         lowerHurt: { from: 73, to: 73, speed: 24 },
-        fall: { from: 73, to: 73, speed: 24 },
+        fall: { from: 76, to: 79, speed: 16 },
+        getup: { from: 80, to: 81, speed: 16 },
         hurt3: { from: 74, to: 74, speed: 24 },
         crouchHurt: { from: 75, to: 75, speed: 24 },
       },
@@ -450,7 +485,7 @@ async function loadAssets() {
     giorono: {
       x: 0,
       y: 0,
-      width: 1280,
+      width: 1432,
       height: 1160,
       sliceX: 8,
       sliceY: 8,
@@ -459,7 +494,8 @@ async function loadAssets() {
         crouch: { from: 4, to: 6, speed: 24 },
         walkForward: { from: 7, to: 14, speed: 15, loop: true },
         walkBackward: { from: 14, to: 7, speed: 14, loop: true },
-        jump: { from: 45, to: 47, speed: 24 },
+        jump: { from: 45, to: 47, speed: 8 },
+        jumpKick: { from: 48, to: 50, speed: 24 },
         punch: { from: 15, to: 19, speed: 24 },
         kick: { from: 20, to: 24, speed: 24 },
         kick2: { from: 25, to: 27, speed: 24 },
@@ -467,9 +503,11 @@ async function loadAssets() {
         win: { from: 34, to: 36, speed: 24 },
         crouchPunch: { from: 37, to: 39, speed: 24 },
         crouchKick: { from: 40, to: 44, speed: 24 },
-        upperHurt: { from: 48, to: 50, speed: 24 },
-        lowerHurt: { from: 51, to: 53, speed: 24 },
-        fall: { from: 54, to: 56, speed: 24 },
+        upperHurt: { from: 51, to: 53, speed: 24 },
+        lowerHurt: { from: 54, to: 56, speed: 24 },
+        fall: { from: 57, to: 59, speed: 8 },
+        getup: { from: 60, to: 61, speed: 16 },
+        charge: { from: 35, to: 35, speed: 1 },
       },
     },
   });

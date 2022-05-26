@@ -1,63 +1,118 @@
-//all animation after which idle will be played
+//all animation after which onEnd will be played
 const allAnim = [
-  "chop",
-  "punchUp",
-  "shoot",
-  "shootUp",
-  "heavyPunch",
-  "charge",
-  "walkForward",
-  "walkBackward",
-  "upperHurt",
-  "lowerHurt",
-  "crouchHurt",
-  "chop2",
-  "shootDown",
-  "ray",
-  "fall",
+  {
+    name: "chop",
+    onEnd: "idle",
+  },
+  {
+    name: "punchUp",
+    onEnd: "idle",
+  },
+  {
+    name: "shoot",
+    onEnd: "idle",
+  },
+  {
+    name: "shootUp",
+    onEnd: "idle",
+  },
+  {
+    name: "heavyPunch",
+    onEnd: "idle",
+  },
+  {
+    name: "charge",
+    onEnd: "idle",
+  },
+  {
+    name: "walkForward",
+    onEnd: "idle",
+  },
+  {
+    name: "walkBackward",
+    onEnd: "idle",
+  },
+  {
+    name: "upperHurt",
+    onEnd: "idle",
+  },
+  {
+    name: "crouchHurt",
+    onEnd: "idle",
+  },
+  {
+    name: "lowerHurt",
+    onEnd: "idle",
+  },
+  {
+    name: "getup",
+    onEnd: "idle",
+  },
+  {
+    name: "ray",
+    onEnd: "idle",
+  },
+  {
+    name: "chop2",
+    onEnd: "idle",
+  },
+  {
+    name: "shootDown",
+    onEnd: "idle",
+  },
+  {
+    name: "crouchPunch",
+    onEnd: "crouch",
+    frame: 8,
+  },
+  {
+    name: "crouchPunch2",
+    onEnd: "crouch",
+    frame: 8,
+  },
 ];
 //hitBox data of player
 const hitBoxData = [
   {
     //chop animation
     frame: 34,
-    position: vec2(76, -200),
+    position: vec2(90, -228),
     size: { w: 32, h: 32 },
     tag: "johnnyPunch",
   },
   {
     //punch Up
     frame: 40,
-    position: vec2(90, -300),
+    position: vec2(128, -350),
     size: { w: 32, h: 32 },
     tag: "johnnyPunch",
   },
   {
     //heavy Punch
     frame: 50,
-    position: vec2(128, -54),
+    position: vec2(150, -54),
     size: { w: 64, h: 128 },
     tag: "johnnyHeavyPunch",
   },
   {
     //chop2
     frame: 112,
-    position: vec2(128, -208),
-    size: { w: 32, h: 32 },
+    position: vec2(100, -232),
+    size: { w: 100, h: 32 },
     tag: "johnnyChop2",
   },
   {
     //crouch punch1
     frame: 93,
-    position: vec2(180, -112),
-    size: { w: 32, h: 32 },
+    position: vec2(190, -112),
+    size: { w: 48, h: 48 },
     tag: "johnnyChop2",
   },
   {
     //crouch punch2
     frame: 101,
-    position: vec2(185, -100),
-    size: { w: 32, h: 32 },
+    position: vec2(180, -100),
+    size: { w: 48, h: 48 },
     tag: "johnnyChop2",
   },
 ];
@@ -164,9 +219,9 @@ const collisionData = [
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.4,
     soundTimeOut: 0.5,
-    attackDamage: 3.5,
-    pushX: 100,
-    pushY: 600,
+    attackDamage: 4.2,
+    pushX: 5,
+    pushY: 50,
     effect: [7, 1],
     shake: 8,
   },
@@ -176,9 +231,9 @@ const collisionData = [
     collisionTimeOut: 0.2,
     pauseTimeOut: 0.4,
     soundTimeOut: 0.5,
-    attackDamage: 3.5,
-    pushX: 100,
-    pushY: 600,
+    attackDamage: 4.2,
+    pushX: 60,
+    pushY: 50,
     effect: [7, 1],
     shake: 8,
   },
@@ -187,36 +242,74 @@ const hurtBoxData = [
   {
     anim: "idle",
     one: {
-      offset: vec2(44, -144),
-      size: { w: 80, h: 100 },
+      offset: vec2(64, -128),
+      size: { w: 90, h: 128 },
       angle: 0,
     },
     two: {
-      offset: vec2(44, -54),
-      size: { w: 164, h: 70 },
+      offset: vec2(64, -32),
+      size: { w: 184, h: 90 },
+      angle: 0,
+    },
+  },
+  {
+    anim: "shootDown",
+    one: {
+      offset: vec2(64, -128),
+      size: { w: 90, h: 128 },
+      angle: 0,
+    },
+    two: {
+      offset: vec2(64, -32),
+      size: { w: 184, h: 90 },
+      angle: 0,
+    },
+  },
+  {
+    anim: "shootUp",
+    one: {
+      offset: vec2(64, -128),
+      size: { w: 90, h: 128 },
+      angle: 0,
+    },
+    two: {
+      offset: vec2(64, -32),
+      size: { w: 184, h: 90 },
+      angle: 0,
+    },
+  },
+  {
+    anim: "shoot",
+    one: {
+      offset: vec2(64, -128),
+      size: { w: 90, h: 128 },
+      angle: 0,
+    },
+    two: {
+      offset: vec2(64, -32),
+      size: { w: 184, h: 90 },
       angle: 0,
     },
   },
   {
     anim: "crouch",
     one: {
-      offset: vec2(64, -32),
-      size: { w: 64, h: 136 },
+      offset: vec2(100, -16),
+      size: { w: 80, h: 190 },
     },
     two: {
-      offset: vec2(-32, -54),
-      size: { w: 144, h: 64 },
+      offset: vec2(0, -32),
+      size: { w: 200, h: 80 },
     },
   },
   {
     anim: "walkForward",
     one: {
-      offset: vec2(156, -54),
-      size: { w: 98, h: 128 },
-      angle: -45,
+      offset: vec2(190, -16),
+      size: { w: 128, h: 150 },
     },
     two: {
-      offset: vec2(44, -54),
+      offset: vec2(40, -54),
       size: { w: 164, h: 64 },
     },
   },
@@ -224,24 +317,11 @@ const hurtBoxData = [
     anim: "walkBackward",
     one: {
       offset: vec2(-64, -54),
-      size: { w: 90, h: 128 },
+      size: { w: 128, h: 150 },
     },
     two: {
-      offset: vec2(116, -54),
-      size: { w: 176, h: 64 },
-    },
-  },
-  {
-    anim: "shootDown",
-    one: {
-      offset: vec2(44, -144),
-      size: { w: 80, h: 100 },
-      angle: 0,
-    },
-    two: {
-      offset: vec2(44, -54),
-      size: { w: 164, h: 70 },
-      angle: 0,
+      offset: vec2(116, -24),
+      size: { w: 176, h: 88 },
     },
   },
 ];
@@ -264,7 +344,7 @@ async function fireBullet({ player, dir, p, offset, angle }) {
     bullet.destroy();
   });
   const trail = add([
-    sprite("bulletTrail1", { anim: "idle" }),
+    sprite("bulletTrail", { anim: "idle" }),
     pos(bullet.pos.sub(player.flipX() ? offset.x : -offset.x, -offset.y / 1.3)),
     origin("center"),
     layer("effect"),
@@ -278,7 +358,7 @@ async function fireBullet({ player, dir, p, offset, angle }) {
     bullet.onUpdate(() => {
       if (!tExist) {
         const trail1 = add([
-          sprite("bulletTrail1", { anim: "idle" }),
+          sprite("blueTrail", { anim: "idle" }),
           pos(
             bullet.pos.sub(
               player.flipX() ? -offset.x : offset.x,
@@ -359,15 +439,12 @@ const shoot = {
   ex: true,
   anim: "shoot",
   timeOut: 0.85,
-  fun: ({ player, stand }) => {
+  fun: ({ player, stand, chargeBar }) => {
     play("bulletActivate", {
       volume: charSound * 1.5,
     });
     play("tuskAttack", {
       volume: charSound,
-    });
-    play("chummi", {
-      volume: charSound / 2,
     });
     wait(0.38, () => {
       play("bulletSound", {
@@ -378,8 +455,9 @@ const shoot = {
         angle: 0,
         dir: vec2(1, 0),
         offset: vec2(64, 0),
-        p: vec2(64, -222),
+        p: vec2(8 * vw, -35 * vh),
       });
+      chargeBar.discharge(20);
     });
   },
 };
@@ -387,22 +465,12 @@ const shootUp = {
   ex: true,
   anim: "shootUp",
   timeOut: 0.5,
-  fun: ({ player, stand }) => {
-    // fireBullet({
-    //   player: player,
-    //   angle: 45,
-    //   dir: vec2(1, -0.75),
-    //   offset: vec2(64, -64),
-    //   p: vec2(32, -256),
-    // });
+  fun: ({ player, stand, chargeBar }) => {
     play("bulletActivate", {
       volume: charSound * 1.5,
     });
     play("tuskAttack", {
       volume: charSound,
-    });
-    play("chummi", {
-      volume: charSound / 2,
     });
     wait(0.3, () => {
       play("bulletSound", {
@@ -413,8 +481,9 @@ const shootUp = {
         angle: 45,
         dir: vec2(1, -0.75),
         offset: vec2(64, -64),
-        p: vec2(58, -280),
+        p: vec2(5 * vw, -45 * vh),
       });
+      chargeBar.discharge(20);
     });
   },
 };
@@ -424,7 +493,7 @@ const shootDown = {
   ex: true,
   anim: "shootDown",
   timeOut: 1,
-  fun: ({ player, stand }) => {
+  fun: ({ player, stand, chargeBar }) => {
     wait(0.2, () => {
       play("bulletSound2");
       const portal = add([
@@ -438,6 +507,7 @@ const shootDown = {
         layer("effect"),
         "portal",
       ]);
+      chargeBar.discharge(20);
       portal.onCollide("hurtBox", () => {
         portal.destroy();
       });
@@ -450,7 +520,7 @@ const ray = {
   ex: true,
   anim: "ray",
   timeOut: 1,
-  fun: ({ player, stand }) => {
+  fun: ({ player, stand, chargeBar }) => {
     play("bulletActivate", {
       volume: charSound * 1.5,
     });
@@ -461,13 +531,14 @@ const ray = {
       add([
         sprite("ray", { anim: "idle" }),
         area(),
-        pos(player.pos.add(player.flipX() ? -116 : 116, -50)),
+        pos(player.pos.add(player.flipX() ? -116 : 116, -30)),
         origin(player.flipX() ? "botright" : "botleft"),
-        lifespan(0.7),
+        lifespan(0.5),
         scale(2),
         layer("effect"),
         "johnnyRay",
       ]);
+      chargeBar.discharge(20);
     });
   },
 };
@@ -510,13 +581,17 @@ const johnny = {
   displayName: "JOHNNY JOESTAR",
   speed: 180,
   jumpForce: 0,
-  scale: 3,
+  scale: 4,
+  width: 3.7,
+  height: 3.7,
+  standWidth: 0.5,
+  standHeight: 1,
   allAnim: allAnim,
   hitBoxData: hitBoxData,
   hurtBoxData: hurtBoxData,
   collisionData: collisionData,
   standHitBoxData: 0,
-  areaOffset: vec2(0, -50),
+  areaOffset: vec2(0, -25),
   standOffset: vec2(0, -256),
   normalKey: {
     w: heavyPunch,
@@ -538,8 +613,8 @@ const johnny = {
     s: ray,
     d: shoot,
     wDown: empty,
-    aDown: empty,
-    sDown: empty,
+    aDown: crouchPunch,
+    sDown: crouchPunch2,
     dDown: shootDown,
     wUp: empty,
     aUp: empty,

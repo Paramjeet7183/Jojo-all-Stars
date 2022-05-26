@@ -61,6 +61,7 @@ class healthBar {
       origin(`bot${originFrame}`),
       layer("hud"),
       fixed(),
+      scale(1.2),
       z(0),
     ]);
     this.playerNameFrame = add([

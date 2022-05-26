@@ -1,3 +1,5 @@
+import { addLightning } from "./effects.js";
+
 function control({
   player,
   stand,
@@ -11,6 +13,8 @@ function control({
   key3,
   key4,
   key5,
+  key6,
+  chargeBar,
 }) {
   let canAttack = true;
   let nKey = data.normalKey;
@@ -20,6 +24,7 @@ function control({
   let isCrouched = false;
   let standDrawn = false;
   let soundPlayed = false;
+  let chargeSoundPlayed = false;
   // player.onUpdate(() => {
   //   if (player.curAnim() == "idle" && !canAttack) {
   //     canAttack = true;
@@ -28,8 +33,9 @@ function control({
   //draw stand
   onKeyPress(key5, () => {
     // standDrawn
-    if (matchStarted == true) {
+    if (matchStarted && !isKeyDown(key6) && !isKeyPressed(key6)) {
       if (standDrawn) {
+        chargeBar.get() <= 0 ? destroy(stand) : () => {};
         if (stand.curAnim() == "idle" && data.name !== "johnny") {
           destroy(stand);
           standDrawn = false;
@@ -39,7 +45,7 @@ function control({
           standDrawn = false;
         }
       } else {
-        if (!standDrawn) {
+        if (!standDrawn && chargeBar.get() > 0) {
           if (!soundPlayed) {
             play(`${data.name}Stand`, {
               volume: charSound * 1.5,
@@ -53,6 +59,7 @@ function control({
             });
           }
           readd(stand);
+          addLightning(player.pos.add(data.areaOffset), data.scale);
           standDrawn = true;
         }
       }
@@ -61,19 +68,21 @@ function control({
   //
   player.onGround(() => {
     if (!isKeyDown(left)) {
-      player.play("idle");
+      player.curAnim() == "fall" ? () => {} : player.play("idle");
       if (data.name !== "johnny") {
         stand.play("idle");
       }
     } else {
-      player.play(player.flipX() ? "walkForward" : "walkBackward");
+      if (player.curAnim() !== "fall" && player.curAnim() !== "getup") {
+        player.play(player.flipX() ? "walkForward" : "walkBackward");
+      }
     }
 
     if (!isKeyDown(right)) {
       if (data.name !== "johnny") {
         stand.play("idle");
       }
-      player.play("idle");
+      player.curAnim() == "fall" ? () => {} : player.play("idle");
     } else {
       player.play(player.flipX() ? "walkBackward" : "walkForward");
     }
@@ -94,14 +103,11 @@ function control({
       !isKeyDown(key4) &&
       !isKeyPressed(key4) &&
       !isKeyPressed(left) &&
-      !isKeyDown(down)
+      !isKeyDown(down) &&
+      !isKeyDown(key6) &&
+      !isKeyPressed(key6)
     ) {
-      player.move(
-        player.flipX()
-          ? vec2(SPEED / 1.3, 0).lerp(player.pos, dt() * 8).x
-          : vec2(SPEED, 0).lerp(player.pos, dt() * 8).x,
-        0
-      );
+      player.move(player.flipX() ? SPEED / 1.3 : SPEED, 0);
       if (
         player.isGrounded() &&
         player.curAnim() !== "walkForward" &&
@@ -129,9 +135,11 @@ function control({
       !isKeyDown(key4) &&
       !isKeyPressed(key4) &&
       !isKeyPressed(right) &&
-      !isKeyDown(down)
+      !isKeyDown(down) &&
+      !isKeyDown(key6) &&
+      !isKeyPressed(key6)
     ) {
-      player.move(player.flipX() ? -SPEED : -SPEED / 1.5, 0);
+      player.move(player.flipX() ? -SPEED : -SPEED / 1.3, 0);
       if (
         player.isGrounded() &&
         player.curAnim() !== "walkForward" &&
@@ -147,6 +155,7 @@ function control({
 
   onKeyDown(up, () => {
     if (
+      player.curAnim() !== "getup" &&
       !player.paused &&
       matchStarted &&
       !matchEnded &&
@@ -173,7 +182,9 @@ function control({
       !isKeyDown(key3) &&
       !isKeyPressed(key3) &&
       !isKeyDown(key4) &&
-      !isKeyPressed(key4)
+      !isKeyPressed(key4) &&
+      !isKeyDown(key6) &&
+      !isKeyPressed(key6)
     ) {
       if (
         player.curAnim() !== "crouch" &&
@@ -189,12 +200,20 @@ function control({
       }
     }
   });
-  onKeyRelease([left, right, down], () => {
+  //charge
+  onKeyDown(key6, () => {
+    if (player.isGrounded() && chargeBar.get() < 12 * vw) {
+      player.play("charge");
+      chargeBar.charge(0.8);
+    }
+  });
+  onKeyRelease([left, right, down, key6], () => {
     if (
       player.isGrounded() &&
       !isKeyDown(left) &&
       !isKeyDown(right) &&
-      !isKeyDown(down)
+      !isKeyDown(down) &&
+      !isKeyDown(key6)
     ) {
       player.play("idle");
       if (data.name !== "johnny") {
@@ -214,12 +233,25 @@ function control({
 
   //all attacks and combo;
   onKeyPress(key1, () => {
-    if (!player.paused && canAttack && matchStarted && !matchEnded) {
+    if (
+      !player.paused &&
+      canAttack &&
+      matchStarted &&
+      !matchEnded &&
+      !isKeyDown(key6) &&
+      !isKeyPressed(key6)
+    ) {
       if (isKeyDown(up) && (standDrawn ? sKey.wUp.ex : nKey.wUp.ex)) {
         player.play(standDrawn ? sKey.wUp.anim : nKey.wUp.anim);
-        (standDrawn ? sKey.wUp : nKey.wUp).fun({
+        (standDrawn
+          ? chargeBar.get() > 0
+            ? sKey.wUp
+            : nKey.wUp
+          : nKey.wUp
+        ).fun({
           player: player,
           stand: stand,
+          chargeBar: chargeBar,
         });
         canAttack = false;
         wait(standDrawn ? sKey.wUp.timeOut : nKey.wUp.timeOut, () => {
@@ -232,9 +264,15 @@ function control({
           wait(standDrawn ? sKey.wDown.timeOut : nKey.wDown.timeOut, () => {
             canAttack = true;
           });
-          (standDrawn ? sKey.wDown : nKey.wDown).fun({
+          (standDrawn
+            ? chargeBar.get() > 0
+              ? sKey.wDown
+              : nKey.wDown
+            : nKey.wDown
+          ).fun({
             player: player,
             stand: stand,
+            chargeBar: chargeBar,
           });
         } else {
           if (player.isGrounded() && (standDrawn ? sKey.w.ex : nKey.w.ex)) {
@@ -243,26 +281,42 @@ function control({
             wait(standDrawn ? sKey.w.timeOut : nKey.w.timeOut, () => {
               canAttack = true;
             });
-            (standDrawn ? sKey.w : nKey.w).fun({
-              player: player,
-              stand: stand,
-            });
+            (standDrawn ? (chargeBar.get() > 0 ? sKey.w : nKey.w) : nKey.w).fun(
+              {
+                player: player,
+                stand: stand,
+                chargeBar: chargeBar,
+              }
+            );
           }
         }
       }
     }
   });
   onKeyPress(key2, () => {
-    if (!player.paused && canAttack && matchStarted && !matchEnded) {
+    if (
+      !player.paused &&
+      canAttack &&
+      matchStarted &&
+      !matchEnded &&
+      !isKeyDown(key6) &&
+      !isKeyPressed(key6)
+    ) {
       if (isKeyDown(up) && (standDrawn ? sKey.aUp.ex : nKey.aUp.ex)) {
         player.play(standDrawn ? sKey.aUp.anim : nKey.aUp.anim);
         canAttack = false;
         wait(standDrawn ? sKey.aUp.timeOut : nKey.aUp.timeOut, () => {
           canAttack = true;
         });
-        (standDrawn ? sKey.aUp : nKey.aUp).fun({
+        (standDrawn
+          ? chargeBar.get() > 0
+            ? sKey.aUp
+            : nKey.aUp
+          : nKey.aUp
+        ).fun({
           player: player,
           stand: stand,
+          chargeBar: chargeBar,
         });
       } else {
         if (isKeyDown(down) && (standDrawn ? sKey.aDown.ex : nKey.aDown.ex)) {
@@ -271,9 +325,15 @@ function control({
           wait(standDrawn ? sKey.aDown.timeOut : nKey.aDown.timeOut, () => {
             canAttack = true;
           });
-          (standDrawn ? sKey.aDown : nKey.aDown).fun({
+          (standDrawn
+            ? chargeBar.get() > 0
+              ? sKey.aDown
+              : nKey.aDown
+            : nKey.aDown
+          ).fun({
             player: player,
             stand: stand,
+            chargeBar: chargeBar,
           });
         } else {
           if (player.isGrounded() && (standDrawn ? sKey.a.ex : nKey.a.ex)) {
@@ -282,26 +342,42 @@ function control({
             wait(standDrawn ? sKey.a.timeOut : nKey.a.timeOut, () => {
               canAttack = true;
             });
-            (standDrawn ? sKey.a : nKey.a).fun({
-              player: player,
-              stand: stand,
-            });
+            (standDrawn ? (chargeBar.get() > 0 ? sKey.a : nKey.a) : nKey.a).fun(
+              {
+                player: player,
+                stand: stand,
+                chargeBar: chargeBar,
+              }
+            );
           }
         }
       }
     }
   });
   onKeyPress(key3, () => {
-    if (!player.paused && canAttack && matchStarted && !matchEnded) {
+    if (
+      !player.paused &&
+      canAttack &&
+      matchStarted &&
+      !matchEnded &&
+      !isKeyDown(key6) &&
+      !isKeyPressed(key6)
+    ) {
       if (isKeyDown(up) && (standDrawn ? sKey.sUp.ex : nKey.sUp.ex)) {
         player.play(standDrawn ? sKey.sUp.anim : nKey.sUp.anim);
         canAttack = false;
         wait(standDrawn ? sKey.sUp.timeOut : nKey.sUp.timeOut, () => {
           canAttack = true;
         });
-        (standDrawn ? sKey.sUp : nKey.sUp).fun({
+        (standDrawn
+          ? chargeBar.get() > 0
+            ? sKey.sUp
+            : nKey.sUp
+          : nKey.sUp
+        ).fun({
           player: player,
           stand: stand,
+          chargeBar: chargeBar,
         });
       } else {
         if (isKeyDown(down) && (standDrawn ? sKey.sDown.ex : nKey.sDown.ex)) {
@@ -310,9 +386,15 @@ function control({
           wait(standDrawn ? sKey.sDown.timeOut : nKey.sDown.timeOut, () => {
             canAttack = true;
           });
-          (standDrawn ? sKey.sDown : nKey.sDown).fun({
+          (standDrawn
+            ? chargeBar.get() > 0
+              ? sKey.sDown
+              : nKey.sDown
+            : nKey.sDown
+          ).fun({
             player: player,
             stand: stand,
+            chargeBar: chargeBar,
           });
         } else {
           if (player.isGrounded() && (standDrawn ? sKey.s.ex : nKey.s.ex)) {
@@ -321,26 +403,42 @@ function control({
             wait(standDrawn ? sKey.s.timeOut : nKey.s.timeOut, () => {
               canAttack = true;
             });
-            (standDrawn ? sKey.s : nKey.s).fun({
-              player: player,
-              stand: stand,
-            });
+            (standDrawn ? (chargeBar.get() > 0 ? sKey.s : nKey.s) : nKey.s).fun(
+              {
+                player: player,
+                stand: stand,
+                chargeBar: chargeBar,
+              }
+            );
           }
         }
       }
     }
   });
   onKeyPress(key4, () => {
-    if (!player.paused && canAttack && matchStarted && !matchEnded) {
+    if (
+      !player.paused &&
+      canAttack &&
+      matchStarted &&
+      !matchEnded &&
+      !isKeyDown(key6) &&
+      !isKeyPressed(key6)
+    ) {
       if (isKeyDown(up) && (standDrawn ? sKey.dUp.ex : nKey.dUp.ex)) {
         player.play(standDrawn ? sKey.dUp.anim : nKey.dUp.anim);
         canAttack = false;
         wait(standDrawn ? sKey.dUp.timeOut : nKey.dUp.timeOut, () => {
           canAttack = true;
         });
-        (standDrawn ? sKey.dUp : nKey.dUp).fun({
+        (standDrawn
+          ? chargeBar.get() > 0
+            ? sKey.dUp
+            : nKey.dUp
+          : nKey.dUp
+        ).fun({
           player: player,
           stand: stand,
+          chargeBar: chargeBar,
         });
       } else {
         if (isKeyDown(down) && (standDrawn ? sKey.dDown.ex : nKey.dDown.ex)) {
@@ -349,9 +447,15 @@ function control({
           wait(standDrawn ? sKey.dDown.timeOut : nKey.dDown.timeOut, () => {
             canAttack = true;
           });
-          (standDrawn ? sKey.dDown : nKey.dDown).fun({
+          (standDrawn
+            ? chargeBar.get() > 0
+              ? sKey.dDown
+              : nKey.dDown
+            : nKey.dDown
+          ).fun({
             player: player,
             stand: stand,
+            chargeBar: chargeBar,
           });
         } else {
           if (player.isGrounded() && (standDrawn ? sKey.d.ex : nKey.d.ex)) {
@@ -360,10 +464,13 @@ function control({
             wait(standDrawn ? sKey.d.timeOut : nKey.d.timeOut, () => {
               canAttack = true;
             });
-            (standDrawn ? sKey.d : nKey.d).fun({
-              player: player,
-              stand: stand,
-            });
+            (standDrawn ? (chargeBar.get() > 0 ? sKey.d : nKey.d) : nKey.d).fun(
+              {
+                player: player,
+                stand: stand,
+                chargeBar: chargeBar,
+              }
+            );
           }
         }
       }

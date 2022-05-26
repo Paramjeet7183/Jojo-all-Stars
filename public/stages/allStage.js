@@ -41,7 +41,7 @@ async function train() {
     sprite("trainGround"),
     pos(0, 100 * vh),
     origin("botleft"),
-    scale(0.5),
+    scale(1),
     z(1),
   ]);
 }

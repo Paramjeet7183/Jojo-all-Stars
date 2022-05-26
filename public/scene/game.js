@@ -31,10 +31,15 @@ async function Game() {
     layers(["game", "bg", "players", "hud", "effect", "pvp"]);
     console.log("get value chapter", chapter);
     console.log("stageNum", stageNum);
+    const theme = play("theme", {
+      volume: bgm,
+      loop: true,
+    });
     //stage
     stage(stageNum);
     onKeyPress("v", () => {
       go("menu");
+      theme.stop();
     });
     const p = new Player({
       dataObj: allPlayer[p1],
@@ -63,7 +68,7 @@ async function Game() {
       xSmallBar: -10.5 * vw,
       ySmallBar: 2.5 * vh,
       healthBarColor: rgb(255, 215, 0),
-      xPlayerImage: -25 * vw,
+      xPlayerImage: -22 * vw,
       yPlayerImage: -2.5 * vh,
     });
 
@@ -80,7 +85,7 @@ async function Game() {
       xSmallBar: 10.5 * vw,
       ySmallBar: 2.5 * vh,
       healthBarColor: rgb(255, 223, 0),
-      xPlayerImage: 25 * vw,
+      xPlayerImage: 22 * vw,
       yPlayerImage: -2.5 * vh,
     });
 
@@ -111,15 +116,18 @@ async function Game() {
       player: player,
       data: allPlayer[p1],
       stand: playerStand,
-      up: "up",
-      down: "down",
-      left: "left",
-      right: "right",
-      key1: "w",
-      key2: "a",
-      key3: "s",
-      key4: "d",
-      key5: "c",
+      enemy: enemy,
+      chargeBar: playerCharge,
+      up: "w",
+      down: "s",
+      left: "a",
+      right: "d",
+      key1: "i",
+      key2: "j",
+      key3: "k",
+      key4: "l",
+      key5: "u",
+      key6: "o",
     });
     // player control End
     if (mode !== "test") {
@@ -129,7 +137,7 @@ async function Game() {
         enemy: player,
         data: allPlayer[p2],
         health: enemyHealth,
-        charge: enemyCharge,
+        chargeBar: enemyCharge,
       });
     } else {
       if (mode == "test") {
@@ -137,15 +145,18 @@ async function Game() {
           player: enemy,
           data: allPlayer[p2],
           stand: enemyStand,
-          up: "i",
-          down: "k",
-          left: "j",
-          right: "l",
+          enemy: player,
+          chargeBar: enemyCharge,
+          up: "up",
+          down: "down",
+          left: "left",
+          right: "right",
           key1: "5",
           key2: "1",
           key3: "2",
           key4: "3",
           key5: "4",
+          key6: "6",
         });
       }
     }
@@ -305,6 +316,7 @@ async function Game() {
       // wait for 3 sec
       // wait(3, () => {
       // check current round
+      theme.stop();
       if (r == 1) {
         // if player wins then go the 2nd round
         if (winner == "p1") {
@@ -490,7 +502,7 @@ async function Game() {
       played
         ? () => {}
         : (play("retTbc", {
-            volume: bgm,
+            volume: bgm / 1.5,
           }),
           (played = true));
       const l = add([

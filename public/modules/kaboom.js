@@ -1,13 +1,14 @@
 const k = kaboom({
   global: true,
   debug: true,
-  width: window.innerWidth,
-  height: window.innerHeight,
+  canvas: document.querySelector("#myCanvas"),
+  width: Math.floor(window.innerWidth / 16) * 16,
+  height: Math.floor(window.innerWidth / 16) * 9,
   touchToMouse: true,
   crisp: false,
-  //texFilter: "linear",
+  // texFilter: "linear",
   font: "apl386o",
-  background: [0, 0, 0],
+  backgrond: [0, 0, 0, 0],
 });
 window.vw = 0.01 * width();
 window.vh = 0.01 * height();

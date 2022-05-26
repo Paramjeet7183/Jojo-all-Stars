@@ -1,19 +1,11 @@
-loadShader(
-  "invert",
-  null,
-  `
-vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
-	vec4 c = def_frag();
-	return mix(c, vec4(0,0,0,c.a), 1.0);
-}
-`
-);
 class Player {
   constructor({ dataObj, spawnPos, tag }) {
     //fighter
     this.player = add([
       sprite(dataObj.name, {
         anim: "idle",
+        width: dataObj.width * 11 * vw,
+        height: dataObj.height * 16 * vh,
       }),
       area({
         width: 4,
@@ -22,37 +14,43 @@ class Player {
       }),
       body({
         weight: 2.2,
+        jumpForce: 1000,
       }),
       pos(spawnPos, 98 * vh),
       layer("players"),
-      scale(3),
+      scale(1),
       origin("bot"),
-      z(1),
+      z(3),
       state("idle", ["idle", "runForward", "runBackward", "attack"]),
       `${tag}`,
     ]);
+    // console.log("w,h", this.player.width, this.player.height);
     //fighters stand
     this.stand = add([
       sprite(dataObj.standName, {
         anim: dataObj.name !== "johhny" ? "" : "idle",
+        width: dataObj.standWidth * 11 * vw,
+        height: dataObj.standHeight * 16 * vh,
       }),
       pos(0, 0),
       follow(this.player, vec2(0, 0)),
       origin("center"),
       layer("players"),
-      scale(3),
       z(0),
       "stand",
       `${dataObj.standName}`,
     ]);
     //shadow
     this.pShadow = add([
-      sprite(dataObj.name),
-      pos(this.player.x, height() - 5 * vh + dataObj.areaOffset.y - 16),
-      scale(2.8, 3),
+      sprite(dataObj.name, {
+        width: this.player.width,
+        height: this.player.height,
+      }),
+      pos(this.player.x, height() - 5 * vh + dataObj.areaOffset.y - 24),
       origin("top"),
+      scale(1),
       opacity(0.4),
-      shader("invert"),
+      color(BLACK),
       layer("players"),
       z(0),
     ]);
@@ -91,8 +89,10 @@ class Player {
 
     //playing idle animation after end of these animations.
     for (let i = 0; i <= dataObj.allAnim.length - 1; i++) {
-      this.player.onAnimEnd(`${dataObj.allAnim[i]}`, () => {
-        this.player.play("idle");
+      this.player.onAnimEnd(`${dataObj.allAnim[i].name}`, () => {
+        dataObj.allAnim[i].onEnd == "idle"
+          ? this.player.play("idle")
+          : (this.player.frame = dataObj.allAnim[i].frame);
       });
     }
     //stand animation end play idle

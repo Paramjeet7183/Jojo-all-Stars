@@ -396,7 +396,7 @@ async function playerSelectMenu() {
               p1r: 0,
               p2r: 0,
               mode: mode,
-              stageNum: mode == "test" ? 2 : randi(1, 5),
+              stageNum: mode == "test" ? 2 : randi(0, 4),
             });
           },
         });

@@ -8,6 +8,7 @@ import {
   addFire,
   addSpin,
 } from "./effects.js";
+import { Player } from "./Player.js";
 async function collisions({
   opponentTag,
   me,
@@ -87,7 +88,7 @@ async function collisions({
             );
           }
         }
-        shake(cData[i].shake);
+
         opponent.play("upperHurt");
         collisionEffect({
           collideSound: cData[i].collideSound,
@@ -96,7 +97,20 @@ async function collisions({
           soundTimeOut: cData[i].soundTimeOut,
           attackDamage: cData[i].attackDamage,
         });
-        pushBack(opponent, cData[i].pushX, cData[i].pushY);
+        shake(cData[i].shake);
+        if (cData[i].attackDamage >= 4) {
+          pushBack(opponent, cData[i].pushX * 10, cData[i].pushY * 10);
+          opponent.play("fall");
+          if (opponent.isGrounded()) {
+            wait(1.2, () => {
+              if (opponent.curAnim() !== "getup") {
+                opponent.play("getup");
+              }
+            });
+          }
+        } else {
+          pushBack(opponent, cData[i].pushX, cData[i].pushY);
+        }
       });
     }
     if (cData[i].entities[1] == "H2") {
@@ -109,6 +123,7 @@ async function collisions({
           }
         }
         opponent.play("lowerHurt");
+
         collisionEffect({
           collideSound: cData[i].collideSound,
           collisionTimeOut: cData[i].collisionTimeOut,
@@ -117,7 +132,19 @@ async function collisions({
           attackDamage: cData[i].attackDamage,
         });
         shake(cData[i].shake);
-        pushBack(opponent, cData[i].pushX, cData[i].pushY);
+        if (cData[i].attackDamage >= 4) {
+          pushBack(opponent, cData[i].pushX * 10, cData[i].pushY * 10);
+          opponent.play("fall");
+          if (opponent.isGrounded()) {
+            wait(1.2, () => {
+              if (opponent.curAnim() !== "getup") {
+                opponent.play("getup");
+              }
+            });
+          }
+        } else {
+          pushBack(opponent, cData[i].pushX, cData[i].pushY);
+        }
       });
     }
   }

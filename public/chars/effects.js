@@ -78,6 +78,16 @@ async function addFire(position) {
     layer("effect"),
   ]);
 }
+async function addLightning(position, s) {
+  const fire = add([
+    sprite("lightning", { anim: "idle" }),
+    pos(position),
+    origin("bot"),
+    scale(s),
+    lifespan(0.7),
+    layer("effect"),
+  ]);
+}
 export {
   addEff1,
   addEff2,
@@ -87,4 +97,5 @@ export {
   addFire,
   addBlood,
   addSpin,
+  addLightning,
 };
